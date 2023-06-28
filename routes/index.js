@@ -1,5 +1,10 @@
 const express = require('express')
 const router = express.Router();
 
+const GoodRouter = require("./goodRouter");
 
-module.exports = router
+router.use("/goods",GoodRouter.router);
+
+module.exports = {
+    router
+}
