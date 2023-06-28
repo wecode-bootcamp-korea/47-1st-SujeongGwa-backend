@@ -3,7 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
+const { v4 : uuidv4 } = require('uuid');
 
+const uuid = uuidv4();
 const { DataSource } = require('typeorm');
 
 
