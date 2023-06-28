@@ -1,8 +1,9 @@
 const { createConnection } = require('typeorm');
 require('dotenv').config();
-
+let num = 0;
 const pull_data = async (data) => {
   try {
+    num += 1;
     const connection = await createConnection({
       type: process.env.DB_CONNECTION,
       host: process.env.DB_HOST,
@@ -59,7 +60,7 @@ const pull_data = async (data) => {
     let image_url = front_url + data;
     await connection.query(
       ` 
-      INSERT INTO products(sub_category_id, name, surface_type_id, price, weight, image_url)
+      INSERT INTO products( sub_category_id, name, surface_type_id, price, weight, image_url)
       VALUES (${sub_category_id},'${name}',${surface_type_id},${price},${weight},'${image_url}')
       `
     );

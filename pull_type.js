@@ -17,7 +17,7 @@ const pull_data = async (num) => {
     await connection.query(
       `
       INSERT INTO categories (id, title)
-      VALUES (${num}, '${title_Array[num]}')
+      VALUES (${num}, '${title_Array[num-1]}')
       `
     );
 
