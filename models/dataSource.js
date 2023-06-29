@@ -1,4 +1,4 @@
-const  { DataSource } = require('typeorm');
+const { DataSource } = require("typeorm");
 
 const dataSource = new DataSource({
     type: process.env.DB_CONNECTION,
@@ -7,6 +7,6 @@ const dataSource = new DataSource({
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-  });
+});
 
-  module.exports =  dataSource;
+module.exports = dataSource;
