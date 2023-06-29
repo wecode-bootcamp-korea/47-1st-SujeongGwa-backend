@@ -36,7 +36,23 @@ const goodsDao = async(category_id) => {
         throw error
     }
 }
-
+const goodsDetailDao = async(name) => {
+    try{
+        const result = await appDataSource.query(
+            `
+            SELECT products.image_url 
+            FROM products
+            WHERE products.name = ?
+            `,[name]
+        )
+        const url = "https://raw.githubusercontent.com/Teachsue/Image_URL/main/"+result[0].image_url.split('/')[7];
+        return url;
+    }catch(err){
+        const error = new Error('INVALID_DATA_INPUT');
+        error.statusCode = 400;
+        throw error
+    }
+}
 module.exports = {
-    goodsDao
+    goodsDao, goodsDetailDao
 }
