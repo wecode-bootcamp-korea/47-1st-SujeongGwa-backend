@@ -33,7 +33,7 @@ const goodsDao = async(category_id) => {
     }catch(err){
         const error = new Error('INVALID_DATA_INPUT');
         error.statusCode = 400;
-        throw error;
+        throw error
     }
 }
 
