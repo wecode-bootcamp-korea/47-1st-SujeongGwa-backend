@@ -4,17 +4,17 @@ const signIn = async (req, res) => {
   const { type_id, email, account, password } = req.body;
 
   try {
-    let user;
+    let accessToken;
     if (type_id === 1) {
       if (!email) {
         throw { statusCode: 400, message: "Please provide an email" };
       }
-      user = await userService.signInWithEmail(email, password);
+      accessToken = await userService.signInWithEmail(email, password);
     } else {
       if (!account) {
         throw { statusCode: 400, message: "Please provide an account" };
       }
-      user = await userService.signInWithAccount(account, password);
+      accessToken = await userService.signInWithAccount(account, password);
     }
     res.status(200).json({ message: "Login Success" });
   } catch (error) {

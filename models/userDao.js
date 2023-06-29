@@ -10,10 +10,10 @@ const getUserByEmail = async (email) => {
       `,
       [email]
     );
-  
+
     return result;
   } catch (error) {
-    console.error("Error", error);
+    console.error("INVALID_INPUT_DATA", error);
     error.statusCode = 400;
 
     throw error;
@@ -33,7 +33,7 @@ const getUserByAccount = async (account) => {
 
     return result;
   } catch (error) {
-    console.error("Error", error);
+    console.error("INVALID_INPUT_DATA", error);
     error.statusCode = 400;
 
     throw error;
