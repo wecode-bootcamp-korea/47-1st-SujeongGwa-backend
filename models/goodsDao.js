@@ -15,18 +15,18 @@ const goodsDao = async(category_id) => {
         const urlArr = new Array(len).fill('');
         for(let i=0;i<len;i++){
             //console.log(result[i].image_url);
-            let check_int = 0;
-            let randomInt = -1;
-            while(check_int != 1){
-                randomInt = Math.floor(Math.random() * len) ;
-                if(randomInt == len){
-                    randomInt -= 1;
-                }
-                if(checkArr[randomInt] == 1)continue;
-                checkArr[randomInt] = 1;
-                check_int = 1;
-            }
-            const url = "https://raw.githubusercontent.com/Teachsue/Image_URL/main/"+result[randomInt].image_url.split('/')[7];
+            // let check_int = 0;
+            // let randomInt = -1;
+            // while(check_int != 1){
+            //     randomInt = Math.floor(Math.random() * len) ;
+            //     if(randomInt == len){
+            //         randomInt -= 1;
+            //     }
+            //     if(checkArr[randomInt] == 1)continue;
+            //     checkArr[randomInt] = 1;
+            //     check_int = 1;
+            // }
+            const url = "https://raw.githubusercontent.com/Teachsue/Image_URL/main/"+result[i].image_url.split('/')[7];
             urlArr[i] = url;
         }
         return urlArr;
