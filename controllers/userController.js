@@ -1,6 +1,6 @@
 const { userService } = require("../services");
 
-const signUpType = async (req, res) => {
+const usersType = async (req, res) => {
     try {
         const { name } = req.body;
 
@@ -10,7 +10,7 @@ const signUpType = async (req, res) => {
 
         await userService.userType(name);
         return res.status(201).json({
-            message: "next signup",
+            message: "NEXT",
         });
     } catch (err) {
         console.log(err);
@@ -18,4 +18,4 @@ const signUpType = async (req, res) => {
     }
 };
 
-module.exports = { signUpType };
+module.exports = { usersType };

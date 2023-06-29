@@ -1,11 +1,13 @@
 const dataSource = require("./dataSource");
-const Type = async (name) => {
+
+const usersType = async function (name) {
     try {
+        console.log(name);
         return await dataSource.query(
             `INSERT INTO 
               types(
               name
-              ) VALUES (?);`,
+              ) VALUES (?)`,
             [name]
         );
     } catch (err) {
@@ -14,4 +16,4 @@ const Type = async (name) => {
         throw error;
     }
 };
-module.exports = { Type };
+module.exports = { usersType };
