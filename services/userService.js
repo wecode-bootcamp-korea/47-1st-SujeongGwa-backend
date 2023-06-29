@@ -1,8 +1,8 @@
 const { userDao } = require("../models");
 
-const userTypeId = async (name) => {
-    const usertype = await userDao.Type(name);
+const userType = async (name) => {
+    const usertype = await userDao.usersType(name);
     return usertype;
 };
 
-module.exports = { userTypeId };
+module.exports = { userType };
