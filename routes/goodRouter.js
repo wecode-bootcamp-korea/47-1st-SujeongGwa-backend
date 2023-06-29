@@ -4,8 +4,6 @@ const express = require('express');
 const {goodController} = require('../controllers');
 
 const router = express.Router();
-router.get(`/:goodId`,goodController.getGoodController);
+router.get(`/:goodId`, goodController.getGoodController);
 
-module.exports = {
-    router
-}
+module.exports = router
