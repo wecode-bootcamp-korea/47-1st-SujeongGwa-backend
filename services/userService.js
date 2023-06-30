@@ -4,22 +4,23 @@ const jwt = require("jsonwebtoken");
 
 const signInWithEmail = async (email, password) => {
   const user = await userDao.getUserByEmail(email);
-  if (!user || user.length === 0) {
-    const error = new Error("INVALID USER or PASSWORD");
+
+  if (!user || Object.keys(user).length === 0) {
+    const error = new Error("INVALID USER");
     error.statusCode = 404;
     throw error;
   }
 
-  const isMatched = await bcrypt.compare(password, user[0].password);
+  const isMatched = await bcrypt.compare(password, user.password);
 
   if (!isMatched) {
-    const error = new Error("INVALID USER or PASSWORD");
+    const error = new Error("INVALID PASSWORD");
     error.statusCode = 401;
     throw error;
   }
 
   const accessToken = jwt.sign(
-    { email: user[0].email },
+    { email: user.email },
     process.env.JWT_SECRET,
     {
       algorithm: process.env.ALGORITHM,
@@ -30,25 +31,27 @@ const signInWithEmail = async (email, password) => {
   return accessToken;
 };
 
+
+
 const signInWithAccount = async (account, password) => {
   const accountUser = await userDao.getUserByAccount(account);
 
-  if (!accountUser || accountUser.length === 0) {
-    const error = new Error("INVALID USER or PASSWORD");
+  if (!accountUser || accountUser.length === 0 || !accountUser[0].length) {
+    const error = new Error("INVALID USER");
     error.statusCode = 404;
     throw error;
   }
 
-  const isMatched = await bcrypt.compare(password, accountUser[0].password);
+  const isMatched = await bcrypt.compare(password, accountUser[0][0].password);
 
   if (!isMatched) {
-    const error = new Error("INVALID USER or PASSWORD");
+    const error = new Error("INVALID PASSWORD");
     error.statusCode = 401;
     throw error;
   }
 
   const accessToken = jwt.sign(
-    { account: accountUser[0].account },
+    { account: accountUser[0][0].account },
     process.env.JWT_SECRET,
     {
       algorithm: process.env.ALGORITHM,

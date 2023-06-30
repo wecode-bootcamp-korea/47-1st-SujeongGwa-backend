@@ -2,11 +2,18 @@ const dataSource = require("./dataSource");
 
 const getUserByEmail = async (email) => {
   try {
-    const result = await dataSource.query(
+    const [result] = await dataSource.query(
       `SELECT 
-      email, password 
-      FROM users 
-      WHERE email = ?
+       id,
+       type_id,
+       account,
+       name,
+       email, 
+       password 
+      FROM
+       users 
+      WHERE 
+       email = ?
       `,
       [email]
     );
@@ -24,14 +31,21 @@ const getUserByAccount = async (account) => {
   try {
     const result = await dataSource.query(
       `SELECT 
-      account, password 
-      FROM users 
-      WHERE account = ?
+      id,
+      type_id,
+      account,
+      name,
+      email, 
+      password 
+     FROM
+      users 
+     WHERE 
+      account = ?
       `,
       [account]
     );
-
-    return result;
+   
+    return [result];
   } catch (error) {
     console.error("INVALID_INPUT_DATA", error);
     error.statusCode = 400;
