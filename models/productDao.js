@@ -1,26 +1,28 @@
 const dataSource = require("./dataSource");
 
-  const getProductDetails= async function (products.id) {
-       try{
-        const detail=await dataSource.query ( 
-        `
-        SELECT
-        sub_category_id, 
-        name, 
-        surface_type_id, 
-        price, 
-        weight
-        FROM 
-        products
-        WHERE products.id=?
-      `,
-      [products.id]
-      );
-       return detail;
-    }catch(error){
-        error = new Error('DATABASE_CONNECTION_ERROR');
-        error.statusCode = 400;
-        throw error;  
-    };
+const getProductDetails = async function (productId) {
+    try {
+        const detail = await dataSource.query(
+            `
+            SELECT
+                sub_category_id,
+                name,
+                surface_type_id,
+                price,
+                weight
+            FROM
+                products
+            WHERE
+                products.id = ?
+            `,
+            [productId]
+        );
 
-module.exports = { getProductDetails};
+        return detail;
+    } catch (error) {
+        console.log(error);
+        throw new Error("DATABASE_CONNECTION_ERROR");
+    }
+};
+
+module.exports = { getProductDetails };
