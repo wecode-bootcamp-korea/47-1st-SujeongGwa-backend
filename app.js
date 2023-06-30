@@ -3,8 +3,9 @@ require('dotenv').config();
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-const dataSource = require('./models/dataSource');
 const route = require('./routes');
+const DataSource = require('./models/dataSource');
+
 const app = express();
 
 app.use(cors());
@@ -16,11 +17,10 @@ app.get('/ping', function (req, res) {
   res.json({ message: 'pong' });
 });
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {
-  await dataSource
-    .initialize()
+  await DataSource.initialize()
     .then(() => {
       console.log('Data Source has been initialized!');
     })
