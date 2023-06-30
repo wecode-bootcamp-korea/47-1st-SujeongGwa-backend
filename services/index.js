@@ -1,2 +1,4 @@
-const cartService = require("./cartService");
-module.exports = { cartService };
+const cartService = require('./cartService');
+module.exports = {
+  cartService,
+};

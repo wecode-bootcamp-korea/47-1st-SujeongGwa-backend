@@ -1,2 +1,5 @@
-const cartController = require("./cartController");
-module.exports = { cartController };
+const cartController = require('./cartController');
+
+module.exports = {
+  cartController,
+};

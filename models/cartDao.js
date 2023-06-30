@@ -2,7 +2,7 @@ const dataSource = require('./dataSource');
 
 const queryCartItems = async (userId) => {
   try {
-    const data = await database.query(
+    const data = await dataSource.query(
       `
         SELECT
           carts.product_id,
@@ -11,7 +11,9 @@ const queryCartItems = async (userId) => {
           products.name,
           products.surface_type_id,
           products.price,
-          products.weight
+          products.weight,
+          (carts.quantity*products.price) AS totalPrice,
+          (carts.quantity*products.weight) AS totalWeight
         FROM
           carts
         JOIN
@@ -22,7 +24,7 @@ const queryCartItems = async (userId) => {
       [userId]
     );
     return data;
-  } catch {
+  } catch (err) {
     const error = new Error('DATABASE_QUERY_ERROR');
     error.statusCode = 500;
     throw error;
