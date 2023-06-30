@@ -58,7 +58,27 @@ const patchProductsInCart = async(user_id,product_name, quantity)=>{
         throw error;
       }
 }
+const deleteProductsInCart = async(users,goods)=>{
+    if (!users) {
+      const error = new Error("User ID is required");
+      error.statusCode = 400;
+      throw error;
+    }try{
+      const cart_delete = await dataSource.query(
+        `
+        DELETE FROM carts
+        WHERE carts.user_id = ?
+        AND carts.product_id = ?
+        `,[users,goods]
+      )
+      return cart_delete;
+    }catch(error) {
+      console.error("INVALID_INPUT_DATA", error);
+      error.statusCode = 400;
+      throw error;
+    }
 
+}
 module.exports = {
-  postProductsInCart, patchProductsInCart
+  postProductsInCart, patchProductsInCart,deleteProductsInCart
 };

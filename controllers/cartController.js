@@ -16,12 +16,21 @@ const patchProductsInCart = async (req,res) => {
     const quantity = req.body.quantity;
     try{
         await cartService.patchProductsInCart(users,goods, quantity);
-        res.status(200).json({message : "Success Patch Products"});
+        res.status(200).json({message : "Success Patch Product"});
     }catch(error){
         res.status(400).json({message:"INVALID_INPUT"});
     }
-    
+}
+const deleteProductsInCart = async(req,res) => {
+  const users = req.body.users;
+  const goods = req.body.goods;
+  try{
+    await cartService.deleteProductsInCart(users,goods);
+    res.status(200).json({message : "Success Delete Product"})
+  }catch(error){
+    res.status(400).json({message:"INVALID_INPUT"});
+  }
 }
 module.exports = {
-  postProductsInCart, patchProductsInCart
+  postProductsInCart, patchProductsInCart, deleteProductsInCart
 };
