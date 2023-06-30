@@ -8,10 +8,7 @@ const postOrderByCart = async (user_id, address) => {
     const order_status_id = 2;
 
     const carts = await dataSource.query(
-      `SELECT * FROM 
-         carts 
-        WHERE 
-         user_id = ?`,
+      `SELECT * FROM carts WHERE user_id = ?`,
       [user_id]
     );
 
@@ -20,10 +17,7 @@ const postOrderByCart = async (user_id, address) => {
 
     for (const cart of carts) {
       const product = await dataSource.query(
-        `SELECT * FROM 
-          products 
-         WHERE 
-          id = ?`,
+        `SELECT * FROM products WHERE id = ?`,
         [cart.product_id]
       );
 
@@ -50,6 +44,7 @@ const postOrderByCart = async (user_id, address) => {
       ]
     );
 
+    console.log(order);
     return order;
   } catch (error) {
     throw error;
