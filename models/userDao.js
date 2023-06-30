@@ -44,7 +44,7 @@ const getUserByAccount = async (account) => {
       `,
       [account]
     );
-   
+
     return [result];
   } catch (error) {
     console.error("INVALID_INPUT_DATA", error);

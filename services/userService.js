@@ -19,19 +19,13 @@ const signInWithEmail = async (email, password) => {
     throw error;
   }
 
-  const accessToken = jwt.sign(
-    { email: user.email },
-    process.env.JWT_SECRET,
-    {
-      algorithm: process.env.ALGORITHM,
-      expiresIn: process.env.JWT_EXPIRES_IN,
-    }
-  );
+  const accessToken = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
+    algorithm: process.env.ALGORITHM,
+    expiresIn: process.env.JWT_EXPIRES_IN,
+  });
 
   return accessToken;
 };
-
-
 
 const signInWithAccount = async (account, password) => {
   const accountUser = await userDao.getUserByAccount(account);
