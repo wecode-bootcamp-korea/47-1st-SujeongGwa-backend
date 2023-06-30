@@ -1,20 +1,31 @@
 const dataSource = require('./dataSource');
 
-const getCarts = async (userId) => {
+const queryCartItems = async (userId) => {
   try {
-    const myCart = await dataSource.query(
+    const data = await database.query(
       `
-        SELECT cartId, productId
-        FROM carts
-        WHERE userId = ?;
-      `,
+        SELECT
+          carts.product_id,
+          products.subcategory_id,
+          products.name,
+          products.surface_type_id,
+          products.price,
+          products.weight
+        FROM
+          carts
+        JOIN
+          products ON carts.product_id = products.id
+        WHERE
+          carts.user_id = ?
+        `,
       [userId]
     );
-    return myCart;
-  } catch (error) {
-    error = new Error('INVALID_DATA');
-    error.statusCode = 400;
+    return data;
+  } catch {
+    const error = new Error('DATABASE_QUERY_ERROR');
+    error.statusCode = 500;
     throw error;
   }
 };
-module.exports = { getCarts };
+
+module.exports = { queryCartItems };

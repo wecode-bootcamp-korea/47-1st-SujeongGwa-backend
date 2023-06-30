@@ -2,11 +2,17 @@ const { cartService } = require('../services');
 
 const getCartItems = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const result = await cartService.getCarts(userId);
-    return res.status(200).json({ message: 'GET SUCCESS', data: result });
+    const userId = req.query.userId;
+
+    const queryCartItems = await cartService.getCarts(userId);
+    return res.status(200).json({
+      data: queryCartItems,
+    });
   } catch (error) {
-    return res.status(400).json({ message: 'INVALID_DATA' });
+    const errorMessage = 'DATABASE_QUERY_ERROR';
+    return res.status(500).json({
+      error: errorMessage,
+    });
   }
 };
 
