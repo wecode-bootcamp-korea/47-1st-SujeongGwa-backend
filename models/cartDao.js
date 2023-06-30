@@ -6,7 +6,8 @@ const queryCartItems = async (userId) => {
       `
         SELECT
           carts.product_id,
-          products.subcategory_id,
+          carts.quantity,
+          products.sub_category_id,
           products.name,
           products.surface_type_id,
           products.price,
@@ -28,4 +29,4 @@ const queryCartItems = async (userId) => {
   }
 };
 
-module.exports = { queryCartItems };
+module.exports = { queryCartItems, dataSource };
