@@ -13,26 +13,7 @@ const loginRequired = async (req, res, next) => {
 
     const payload = jwt.verify(accessToken, process.env.JWT_SECRET);
 
-    let user;
-    if (payload.email) {
-      user = await userService.signInWithEmail(
-        payload.email,
-        req.body.password
-      );
-    } else if (payload.account) {
-      user = await userService.signInWithAccount(
-        payload.account,
-        req.body.password
-      );
-    }
-
-    if (!user) {
-      const error = new Error("USER_DOES_NOT_EXIST");
-      error.statusCode = 404;
-      throw error;
-    }
-
-    req.user = user;
+    req.user = payload;
     next();
   } catch (error) {
     if (!error.statusCode) {
