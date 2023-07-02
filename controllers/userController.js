@@ -24,7 +24,6 @@ const signUp = async (req, res) => {
       message: 'SIGNUP_SUCCESS',
     });
   } catch (error) {
-    console.log(error);
     return res
       .status(error.statusCode || 500)
       .json({ message: 'INVALID_USER_REQUEST' });
