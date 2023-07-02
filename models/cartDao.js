@@ -4,22 +4,29 @@ const queryCartItems = async (userId) => {
   try {
     const data = await dataSource.query(
       `
-        SELECT
-          carts.product_id,
-          carts.quantity,
-          products.sub_category_id,
-          products.name,
-          products.surface_type_id,
-          products.price,
-          products.weight,
-          (carts.quantity*products.price) AS totalPrice,
-          (carts.quantity*products.weight) AS totalWeight
-        FROM
-          carts
-        JOIN
-          products ON carts.product_id = products.id
-        WHERE
-          carts.user_id = ?
+      SELECT
+      carts.product_id,
+      SUM(carts.quantity) AS totalQuantity,
+      products.sub_category_id,
+      products.name,
+      products.surface_type_id,
+      products.price,
+      products.weight,
+      SUM(carts.quantity * products.price) AS totalPrice,
+      SUM(carts.quantity * products.weight) AS totalWeight
+    FROM
+      carts
+    JOIN
+      products ON carts.product_id = products.id
+    WHERE
+      carts.user_id = ?
+    GROUP BY
+      carts.product_id,
+      products.sub_category_id,
+      products.name,
+      products.surface_type_id,
+      products.price,
+      products.weight
         `,
       [userId]
     );
