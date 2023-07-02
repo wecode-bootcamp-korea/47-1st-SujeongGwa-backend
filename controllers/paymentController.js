@@ -2,7 +2,7 @@ const { paymentService } = require('../services');
 
 const mypoint = async function (req, res) {
   try {
-    const userId = 32;
+    const userId = req.users.id;
     const result = await paymentService.getMyPoint(userId);
     return res.status(200).json(result);
   } catch (error) {
