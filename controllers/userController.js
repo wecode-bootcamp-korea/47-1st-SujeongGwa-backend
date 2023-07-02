@@ -1,4 +1,4 @@
-const { userService } = require("../services");
+const { userService } = require('../services');
 
 const signIn = async (req, res) => {
   const { type_id, email, account, password } = req.body;
@@ -17,11 +17,12 @@ const signIn = async (req, res) => {
       accessToken = await userService.signInWithAccount(account, password);
     }
 
-    res.status(200).json({ message: "Login Success", accessToken });
+    res.status(200).json({ message: 'Login Success', accessToken });
   } catch (error) {
     res.status(error.statusCode || 401).json({ message: error.message });
   }
 };
+
 module.exports = {
   signIn,
 };

@@ -10,7 +10,7 @@ CREATE TABLE products(
   description VARCHAR(1000),
   image_url VARCHAR(1000) NULL,
   PRIMARY KEY(id),
-FOREIGN KEY (sub_category_id) REFERENCES sub_categories (id)
+ FOREIGN KEY (sub_category_id) REFERENCES sub_categories (id)
 );
 
 -- migrate:down
