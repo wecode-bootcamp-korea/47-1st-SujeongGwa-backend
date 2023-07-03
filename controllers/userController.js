@@ -52,7 +52,21 @@ const signIn = async (req, res) => {
     res.status(error.statusCode || 401).json({ message: error.message });
   }
 };
+
+const myOrder = async function (req, res) {
+  try {
+    const userId = req.user.id;
+    const result = await userService.myOrder(userId);
+    return res.status(200).json(result);
+  } catch (error) {
+    const errorMessage = 'DATABASE_QUERY_ERROR';
+    return res.status(400).json({
+      error: errorMessage,
+    });
+  }
+};
 module.exports = {
   signUp,
   signIn,
+  myOrder,
 };

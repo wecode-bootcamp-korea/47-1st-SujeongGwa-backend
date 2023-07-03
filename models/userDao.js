@@ -1,3 +1,4 @@
+const { query } = require('express');
 const dataSource = require('./dataSource');
 
 const createUser = async function (
@@ -80,6 +81,18 @@ const getUserByAccount = async (account) => {
 
     throw error;
   }
+};
+
+const myOrderDetail = async function (userId) {
+  const orderDetail = await dataSource.query(
+    ` 
+SELECT 
+
+
+
+
+`
+  );
 };
 
 module.exports = {
