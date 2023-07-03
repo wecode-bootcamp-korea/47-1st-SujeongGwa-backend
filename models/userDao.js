@@ -121,10 +121,11 @@ const orderlist = async function (userId) {
       `,
       [userId]
     );
+
     return myOrderlist;
   } catch (error) {
     const err = new Error('DATABASE_QUERY_ERROR');
-    error.statusCode = 500;
+    err.statusCode = 500;
     throw err;
   }
 };

@@ -55,13 +55,19 @@ const signIn = async (req, res) => {
 
 const orderDetail = async function (req, res) {
   try {
-    const userId = 4;
+    const userId = req.user.id;
     const result = await userService.orderDetail(userId);
-    return res.status(200).json(result);
+
+    if (result.length === 0 || result[0].order_number === null) {
+      return res.status(200).json({ message: 'Order list is empty' });
+    } else {
+      return res.status(200).json({ data: result });
+    }
   } catch (error) {
-    res.status(500).json({ message: 'Database_error' });
+    return res.status(500).json({ message: 'Database error' });
   }
 };
+
 module.exports = {
   signUp,
   signIn,
