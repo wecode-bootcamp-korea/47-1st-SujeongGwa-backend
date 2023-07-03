@@ -58,7 +58,7 @@ const orderDetail = async function (req, res) {
     const userId = req.user.id;
     const result = await userService.orderDetail(userId);
 
-    if (result.length === 0 || result[0].order_number === null) {
+    if (result.length === 0) {
       return res.status(200).json({ message: 'Order list is empty' });
     } else {
       return res.status(200).json({ data: result });
