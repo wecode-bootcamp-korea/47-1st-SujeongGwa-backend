@@ -1,7 +1,7 @@
 const { orderService } = require("../services");
 
 const postOrderByCart = async (req, res) => {
-  const { userId } = req.userId.body;
+  const { userId } = req.params;
   const { address } = req.body;
 
   try {

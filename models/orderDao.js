@@ -1,22 +1,30 @@
 const dataSource = require("./dataSource");
-
 const uuid = require("uuid");
+
 const postOrderByCart = async (user_id, address) => {
+  const { connection, queryRunner } = await dataSource.getConnection();
+
   try {
-    const order_number = uuid.v4();
+    await queryRunner.startTransaction();
 
-    const order_status_id = 2;
+    const user = await queryRunner.query(
+      `SELECT point FROM users WHERE id = ?`,
+      [user_id]
+    );
+    const userPoint = user[0].point;
 
-    const carts = await dataSource.query(
+    const carts = await queryRunner.query(
       `SELECT * FROM carts WHERE user_id = ?`,
       [user_id]
     );
+    if (carts.length === 0) {
+      throw new Error("Cart is empty");
+    }
 
     let total_price = 0;
     let total_weight = 0;
-
     for (const cart of carts) {
-      const product = await dataSource.query(
+      const product = await queryRunner.query(
         `SELECT * FROM products WHERE id = ?`,
         [cart.product_id]
       );
@@ -25,7 +33,20 @@ const postOrderByCart = async (user_id, address) => {
       total_weight += product[0].weight * cart.quantity;
     }
 
-    const order = await dataSource.query(
+    if (userPoint < total_price) {
+      throw new Error("Not enough points to complete this purchase");
+    }
+
+    const newPoint = userPoint - total_price;
+    await queryRunner.query(`UPDATE users SET point = ? WHERE id = ?`, [
+      newPoint,
+      user_id,
+    ]);
+
+    const order_number = uuid.v4();
+    const order_status_id = 1; // BEFORE_ORDER 상태
+
+    const order = await queryRunner.query(
       `INSERT INTO orders(
         order_number,
         user_id,
@@ -33,7 +54,7 @@ const postOrderByCart = async (user_id, address) => {
         total_price,
         total_weight,
         address
-      ) VALUES(?,?,?,?,?,?)`,
+      )VALUES(?,?,?,?,?,?)`,
       [
         order_number,
         user_id,
@@ -44,10 +65,22 @@ const postOrderByCart = async (user_id, address) => {
       ]
     );
 
-    console.log(order);
+    await queryRunner.query(
+      `DELETE FROM 
+        carts
+      WHERE 
+      user_id = ?`,
+      [user_id]
+    );
+
+    await queryRunner.commitTransaction();
+
     return order;
   } catch (error) {
+    await queryRunner.rollbackTransaction();
     throw error;
+  } finally {
+    await queryRunner.release();
   }
 };
 

@@ -3,8 +3,9 @@ require("dotenv").config();
 const express = require("express");
 const logger = require("morgan");
 const cors = require("cors");
-const DataSource = require("./models/dataSource");
+const { getDatabaseConnection } = require("./models/dataSource");
 const route = require("./routes");
+
 const app = express();
 
 app.use(cors());
@@ -18,14 +19,13 @@ app.get("/ping", function (req, res) {
 
 const PORT = process.env.PORT;
 
-app.listen(PORT, async () => {
-  await DataSource.initialize()
-    .then(() => {
-      console.log("Data Source has been initialized!");
-    })
-    .catch((err) => {
-      console.error("Error during Data Source initialization:", err);
+getDatabaseConnection()
+  .then(() => {
+    console.log("Database connection has been established!");
+    app.listen(PORT, () => {
+      console.log(`Server listening on port ${PORT}`);
     });
-
-  console.log(`server listening on port ${PORT}`);
-});
+  })
+  .catch((err) => {
+    console.error("Error establishing database connection:", err);
+  });
