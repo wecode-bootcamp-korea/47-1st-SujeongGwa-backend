@@ -1,22 +1,11 @@
 const goodsDao = require("../models/goodsDao"); 
 
 const goodsService = async(category_id) => {
-    try{
-        return goodsDao.goodsDao(category_id);
-    }catch(err){
-        const error = new Error('INVALID_DATA_INPUT');
-        error.statusCode = 400;
-        throw error;
-    }
+    return goodsDao.goodsDao(category_id);
 }
 const goodsDetailService = async(category_id, name) => {
-    try{
-        return goodsDao.goodsDetailDao(name);
-    }catch(err){
-        const error = new Error('INVALID_DATA_INPUT');
-        error.statusCode = 400;
-        throw error;
-    }
+    return goodsDao.goodsDetailDao(name);
+   
 }
 module.exports = {
     goodsService, goodsDetailService

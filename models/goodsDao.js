@@ -1,24 +1,21 @@
 const appDataSource = require("./dataSource");
 
-const goodsDao = async(category_id) => {
+const goodsDao = async(goodsDaoByCategoryId) => {
     try{
-        let result = ``;
-        if(Number(category_id) <=9 && Number(category_id) >= 1){
-            result = await appDataSource.query(
-                `
-                SELECT *
-                FROM products
-                WHERE products.sub_category_id = ?
-                `,[category_id]
-            
-                )
-            }else{
-                const error = new Error('INVALID_NUMBER_INPUT');
-                error.statusCode = 400;
-                throw error
-                
-        }
+            //result : 상품들을 goodsDaoByCategoryId 에 따라 분류한 query
+        const result = await appDataSource.query(
+            `
+            SELECT *
+            FROM products
+            WHERE products.sub_category_id = ?
+            `,[goodsDaoByCategoryId]
         
+            )
+        if(!result){
+            const error = new Error('INVALID_NUMBER_INPUT');
+            error.statusCode = 400;
+            throw error
+        }
         return result;
     }catch(err){
         const error = new Error('INVALID_DATA_INPUT');
@@ -30,11 +27,16 @@ const goodsDetailDao = async(name) => {
     try{
         const result = await appDataSource.query(
             `
-            SELECT products.image_url 
+            SELECT *
             FROM products
             WHERE products.name = ?
             `,[name]
         )
+        if(!result){
+            const error = new Error('INVALID_NAME_INPUT');
+            error.statusCode = 400;
+            throw error
+        }
         return result;
     }catch(err){
         const error = new Error('INVALID_DATA_INPUT');
