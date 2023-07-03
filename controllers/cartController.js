@@ -1,4 +1,18 @@
-const { cartService } = require("../services");
+const cartService = require('../services/cartService');
+
+const createCart = async (req, res) => {
+  const { productId, quantity } = req.body;
+  const userId = req.user;
+
+  try {
+    await cartService.createCart(userId, productId, quantity);
+    res.status(200).json({ message: 'SUCCESS_CREATE_CART' });
+  } catch (error) {
+    res
+      .status(error.statusCode || 400)
+      .json({ message: error.message || 'INVALID_INPUT' });
+  }
+};
 
 const postProductsInCart = async (req, res) => {
   const { user_id, product_id, quantity } = req.body;
@@ -33,5 +47,6 @@ const deleteProductsInCart = async(req,res) => {
   }
 }
 module.exports = {
-  postProductsInCart, patchProductsInCart, deleteProductsInCart
+    createCart, postProductsInCart, patchProductsInCart, deleteProductsInCart
 };
+
