@@ -68,6 +68,7 @@ const orderDetail = async function (req, res) {
     return await res
       .status(err.statusCode || 400)
       .json({ message: err.message });
+  }
 };
 
 module.exports = {
