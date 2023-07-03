@@ -59,19 +59,14 @@ const myaccount = async (userId) => {
     const data = await dataSource.query(
       `
       SELECT
-      users.id AS userId,
-      users.email AS personalAccount,
-      orders.address AS Address,
-      JSON_OBJECT(
-        'date', JSON_OBJECT(
-          'orderNumber', orders.order_number,
-          'totalAmount', orders.total_price
-        )
-      ) AS details
+      users.id AS myId,
+      users.name AS myname,
+      users.email AS myEmail,
+      users.password AS mypassword,
+      orders.address AS myAddress
     FROM
       users
       INNER JOIN orders ON users.id = orders.user_id
-      INNER JOIN points ON users.id = points.user_id
     WHERE
       users.id = ?
       `,

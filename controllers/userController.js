@@ -25,7 +25,7 @@ const signIn = async (req, res) => {
 
 const myaccount = async function (req, res) {
   try {
-    const userId = 32;
+    const userId = 4;
     const result = await userService.getmyaccount(userId);
     return res.status(200).json(result);
   } catch (error) {
