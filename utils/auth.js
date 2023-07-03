@@ -11,15 +11,15 @@ const loginRequired = async (req, res, next) => {
       throw error;
     }
 
-    const payload = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const { userId } = jwt.verify(accessToken, process.env.JWT_SECRET);
 
-    if (!payload.userId) {
+    if (!userId) {
       const error = new Error('Invalid access token');
       error.statusCode = 401;
       throw error;
     }
 
-    req.user = payload.userId;
+    req.user = userId;
     next();
   } catch (error) {
     if (!error.statusCode) {
