@@ -1,4 +1,4 @@
-const { createConnection } = require("typeorm");
+const { createConnection } = require('typeorm');
 
 let connection = null;
 
@@ -11,11 +11,6 @@ const getDatabaseConnection = async () => {
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      synchronize: true,
-      logging: false,
-      entities: ["src/entity/**/*.ts"],
-      migrations: ["src/migration/**/*.ts"],
-      subscribers: ["src/subscriber/**/*.ts"],
     });
   }
 

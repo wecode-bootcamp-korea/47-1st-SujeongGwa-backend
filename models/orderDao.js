@@ -1,5 +1,5 @@
-const dataSource = require("./dataSource");
-const uuid = require("uuid");
+const dataSource = require('./dataSource');
+const uuid = require('uuid');
 
 const postOrderByCart = async (user_id, address) => {
   const { connection, queryRunner } = await dataSource.getConnection();
@@ -8,24 +8,32 @@ const postOrderByCart = async (user_id, address) => {
     await queryRunner.startTransaction();
 
     const user = await queryRunner.query(
-      `SELECT point FROM users WHERE id = ?`,
+      `SELECT 
+       point 
+      FROM 
+       users 
+      WHERE id = ?`,
       [user_id]
     );
     const userPoint = user[0].point;
 
     const carts = await queryRunner.query(
-      `SELECT * FROM carts WHERE user_id = ?`,
+      `SELECT * FROM 
+        carts 
+      WHERE user_id = ?`,
       [user_id]
     );
     if (carts.length === 0) {
-      throw new Error("Cart is empty");
+      throw new Error('Cart is empty');
     }
 
     let total_price = 0;
     let total_weight = 0;
     for (const cart of carts) {
       const product = await queryRunner.query(
-        `SELECT * FROM products WHERE id = ?`,
+        `SELECT * FROM 
+          products 
+        WHERE id = ?`,
         [cart.product_id]
       );
 
@@ -34,7 +42,7 @@ const postOrderByCart = async (user_id, address) => {
     }
 
     if (userPoint < total_price) {
-      throw new Error("Not enough points to complete this purchase");
+      throw new Error('Not enough points to complete this purchase');
     }
 
     const newPoint = userPoint - total_price;
@@ -44,7 +52,7 @@ const postOrderByCart = async (user_id, address) => {
     ]);
 
     const order_number = uuid.v4();
-    const order_status_id = 1; // BEFORE_ORDER 상태
+    const order_status_id = 1;
 
     const order = await queryRunner.query(
       `INSERT INTO orders(
@@ -69,7 +77,7 @@ const postOrderByCart = async (user_id, address) => {
       `DELETE FROM 
         carts
       WHERE 
-      user_id = ?`,
+       user_id = ?`,
       [user_id]
     );
 
