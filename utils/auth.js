@@ -1,20 +1,19 @@
-const jwt = require("jsonwebtoken");
-const { userService } = require("../services");
+const jwt = require('jsonwebtoken');
+const { userService } = require('../services');
 
 const loginRequired = async (req, res, next) => {
   try {
-    const accessToken = req.headers.authorization.split(" ")[1];
+    const accessToken = req.headers.authorization.split(' ')[1];
 
     if (!accessToken) {
-      const error = new Error("NEED_ACCESS_TOKEN");
+      const error = new Error('NEED_ACCESS_TOKEN');
       error.statusCode = 401;
       throw error;
     }
 
     const payload = jwt.verify(accessToken, process.env.JWT_SECRET);
-    const { eamil, account } = payload;
 
-    req.user = payload;
+    req.user = payload.userId;
     next();
   } catch (error) {
     if (!error.statusCode) {
