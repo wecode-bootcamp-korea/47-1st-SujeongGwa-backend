@@ -13,6 +13,12 @@ const loginRequired = async (req, res, next) => {
 
     const payload = jwt.verify(accessToken, process.env.JWT_SECRET);
 
+    if (!payload.userId) {
+      const error = new Error('Invalid access token');
+      error.statusCode = 401;
+      throw error;
+    }
+
     req.user = payload.userId;
     next();
   } catch (error) {
