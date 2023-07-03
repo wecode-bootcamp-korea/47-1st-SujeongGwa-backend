@@ -11,7 +11,8 @@ const postProductsInCart = async (req, res) => {
   }
 };
 const patchProductsInCart = async (req,res) => {
-    const {users, goods, quantity} = req.body;
+    const {goods, quantity} = req.body;
+    const users = req.user;
     
     try{
         await cartService.patchProductsInCart(users,goods, quantity);
