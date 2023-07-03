@@ -2,7 +2,7 @@ const { userService } = require('../services');
 
 const signUp = async (req, res) => {
   try {
-    const { typeId, name, email, password, account } = req.body;
+    const { type_id, name, email, password, account } = req.body;
 
     if (!name || !email || !password) {
       const error = new Error(
