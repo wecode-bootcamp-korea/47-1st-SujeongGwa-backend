@@ -1,12 +1,6 @@
-const dataSource = require("./dataSource");
+const dataSource = require('./dataSource');
 
-const postProductsInCart = async (user_id, product_id, quantity) => {
-  if (!user_id) {
-    const error = new Error("User ID is required");
-    error.statusCode = 400;
-    throw error;
-  }
-
+const creatCart = async (productId, quantity) => {
   try {
     const carts = await dataSource.query(
       `INSERT INTO 
@@ -15,17 +9,17 @@ const postProductsInCart = async (user_id, product_id, quantity) => {
         product_id, 
         quantity
         ) VALUES (?,?,?)`,
-      [user_id, product_id, quantity]
+      [productId, quantity]
     );
 
     return carts;
   } catch (error) {
-    console.error("INVALID_INPUT_DATA", error);
+    console.error('INVALID_INPUT_DATA', error);
     error.statusCode = 400;
     throw error;
   }
 };
 
 module.exports = {
-  postProductsInCart,
+  creatCart,
 };
