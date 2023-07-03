@@ -2,7 +2,7 @@ const { userService } = require('../services');
 
 const signUp = async (req, res) => {
   try {
-    const { type_id, name, email, password, account } = req.body;
+    const { typeId, name, email, password, account } = req.body;
 
     if (!name || !email || !password) {
       const error = new Error(
@@ -12,7 +12,7 @@ const signUp = async (req, res) => {
       throw error;
     }
 
-    if (type_id !== 1 && !account) {
+    if (typeId !== 1 && !account) {
       const error = new Error('KEY_ERROR: Missing required field.');
       error.statusCode = 400;
       throw error;
@@ -31,7 +31,7 @@ const signUp = async (req, res) => {
 };
 
 const signIn = async (req, res) => {
-  const { type_id, email, account, password } = req.body;
+  const { typeId, email, account, password } = req.body;
 
   try {
     let accessToken;
@@ -41,7 +41,7 @@ const signIn = async (req, res) => {
       CORPORATION: 3,
     });
 
-    if (type_id === userTypeEnum.NORMAL_USER) {
+    if (typeId === userTypeEnum.NORMAL_USER) {
       accessToken = await userService.signInWithEmail(email, password);
     } else {
       accessToken = await userService.signInWithAccount(account, password);
@@ -53,20 +53,20 @@ const signIn = async (req, res) => {
   }
 };
 
-const myaccount = async function (req, res) {
+const getUserInfomation = async function (req, res) {
   try {
     const userId = req.user.id;
     const result = await userService.getmyaccount(userId);
     return res.status(200).json(result);
-  } catch (error) {
-    const errorMessage = 'DATABASE_QUERY_ERROR';
-    return res.status(400).json({
-      error: errorMessage,
-    });
+  } catch (err) {
+    console.error(err);
+    return await res
+      .status(err.statusCode || 400)
+      .json({ message: err.message });
   }
 };
 module.exports = {
   signUp,
   signIn,
-  myaccount,
+  getUserInfomation,
 };

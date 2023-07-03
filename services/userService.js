@@ -61,7 +61,7 @@ const signInWithEmail = async (email, password) => {
     throw error;
   }
 
-  const accessToken = jwt.sign({ email: user.email }, process.env.JWT_SECRET, {
+  const accessToken = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
     algorithm: process.env.ALGORITHM,
     expiresIn: process.env.JWT_EXPIRES_IN,
   });
@@ -87,7 +87,7 @@ const signInWithAccount = async (account, password) => {
   }
 
   const accessToken = jwt.sign(
-    { account: accountUser[0][0].account },
+    { userId: accountUser[0][0].id },
     process.env.JWT_SECRET,
     {
       algorithm: process.env.ALGORITHM,

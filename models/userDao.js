@@ -90,8 +90,7 @@ const myaccount = async (userId) => {
       users.id AS myId,
       users.name AS myName,
       users.email AS myEmail,
-      users.password AS mPassword,
-      orders.address AS myAddress
+      users.password AS mPassword
     FROM
       users
       INNER JOIN orders ON users.id = orders.user_id
