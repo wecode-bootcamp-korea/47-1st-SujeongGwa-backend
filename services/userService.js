@@ -1,12 +1,12 @@
-const userDao = require("../models/userDao");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const userDao = require('../models/userDao');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const signInWithEmail = async (email, password) => {
   const user = await userDao.getUserByEmail(email);
 
   if (!user || Object.keys(user).length === 0) {
-    const error = new Error("INVALID USER");
+    const error = new Error('INVALID USER');
     error.statusCode = 404;
     throw error;
   }
@@ -14,7 +14,7 @@ const signInWithEmail = async (email, password) => {
   const isMatched = await bcrypt.compare(password, user.password);
 
   if (!isMatched) {
-    const error = new Error("INVALID PASSWORD");
+    const error = new Error('INVALID PASSWORD');
     error.statusCode = 401;
     throw error;
   }
@@ -31,7 +31,7 @@ const signInWithAccount = async (account, password) => {
   const accountUser = await userDao.getUserByAccount(account);
 
   if (!accountUser || accountUser.length === 0 || !accountUser[0].length) {
-    const error = new Error("INVALID USER");
+    const error = new Error('INVALID USER');
     error.statusCode = 404;
     throw error;
   }
@@ -39,7 +39,7 @@ const signInWithAccount = async (account, password) => {
   const isMatched = await bcrypt.compare(password, accountUser[0][0].password);
 
   if (!isMatched) {
-    const error = new Error("INVALID PASSWORD");
+    const error = new Error('INVALID PASSWORD');
     error.statusCode = 401;
     throw error;
   }
@@ -56,7 +56,13 @@ const signInWithAccount = async (account, password) => {
   return accessToken;
 };
 
+const getmyaccount = async (userId) => {
+  const myAccont = await userDao.myaccount(userId);
+  return myAccont;
+};
+
 module.exports = {
   signInWithEmail,
   signInWithAccount,
+  getmyaccount,
 };
