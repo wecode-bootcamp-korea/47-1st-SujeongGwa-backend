@@ -82,8 +82,30 @@ const getUserByAccount = async (account) => {
   }
 };
 
+const getUserById = async (id) => {
+  try {
+    const userId = await dataSource.query(
+      `SELECT
+      id
+      FROM
+      users
+      WHERE
+      id = ?
+      `,
+      [id]
+    );
+    return [userId];
+  } catch (error) {
+    console.error('INVALID_USER', error);
+    error.statusCode = 400;
+
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
   getUserByAccount,
+  getUserById,
 };

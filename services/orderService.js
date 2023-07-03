@@ -1,8 +1,8 @@
 const orderDao = require("../models/orderDao");
 
-const postOrderByCart = async (user_id, address) => {
+const createOrder = async (userId, address) => {
   try {
-    const postOrder = await orderDao.postOrderByCart(user_id, address);
+    const postOrder = await orderDao.createOrder(userId, address);
     return postOrder;
   } catch (error) {
     console.error("INVALID_INPUT_DATA", error);
@@ -11,5 +11,5 @@ const postOrderByCart = async (user_id, address) => {
 };
 
 module.exports = {
-  postOrderByCart,
+  createOrder,
 };

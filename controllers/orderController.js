@@ -1,17 +1,17 @@
-const { orderService } = require("../services");
+const { orderService } = require('../services');
 
-const postOrderByCart = async (req, res) => {
-  const { userId } = req.params;
+const createOrder = async (req, res) => {
+  const userId = req.user;
   const { address } = req.body;
 
   try {
-    await orderService.postOrderByCart(userId, address);
-    res.status(200).json({ message: "Success Post Orders" });
+    await orderService.createOrder(userId, address);
+    res.status(200).json({ message: 'Success Post Orders' });
   } catch (error) {
-    res.status(400).json({ message: "INVALID USER OR INPUT" });
+    res.status(400).json({ message: 'INVALID USER OR INPUT' });
   }
 };
 
 module.exports = {
-  postOrderByCart,
+  createOrder,
 };

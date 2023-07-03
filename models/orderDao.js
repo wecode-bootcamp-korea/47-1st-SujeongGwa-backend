@@ -1,8 +1,8 @@
-const dataSource = require('./dataSource');
+const getDataSource = require('./dataSource');
 const uuid = require('uuid');
 
-const postOrderByCart = async (user_id, address) => {
-  const { connection, queryRunner } = await dataSource.getConnection();
+const createOrder = async (user_id, address) => {
+  const queryRunner = await getDataSource.createQueryRunner();
 
   try {
     await queryRunner.startTransaction();
@@ -20,9 +20,11 @@ const postOrderByCart = async (user_id, address) => {
     const carts = await queryRunner.query(
       `SELECT * FROM 
         carts 
-      WHERE user_id = ?`,
+      WHERE 
+        user_id = ?`,
       [user_id]
     );
+
     if (carts.length === 0) {
       throw new Error('Cart is empty');
     }
@@ -42,14 +44,22 @@ const postOrderByCart = async (user_id, address) => {
     }
 
     if (userPoint < total_price) {
-      throw new Error('Not enough points to complete this purchase');
+      const error = new Error('Not enough points to complete this purchase');
+      error.statusCode = 400;
+      throw error;
     }
 
     const newPoint = userPoint - total_price;
-    await queryRunner.query(`UPDATE users SET point = ? WHERE id = ?`, [
-      newPoint,
-      user_id,
-    ]);
+    await queryRunner.query(
+      `
+    UPDATE 
+     users 
+    SET
+     point = ? 
+    WHERE 
+     id = ?`,
+      [newPoint, user_id]
+    );
 
     const order_number = uuid.v4();
     const order_status_id = 1;
@@ -93,5 +103,5 @@ const postOrderByCart = async (user_id, address) => {
 };
 
 module.exports = {
-  postOrderByCart,
+  createOrder,
 };
