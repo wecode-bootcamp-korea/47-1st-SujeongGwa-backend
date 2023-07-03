@@ -98,10 +98,6 @@ const signInWithAccount = async (account, password) => {
   return accessToken;
 };
 
-const myOrder = async function (userId) {
-  const getMyOrder = await userDao.myOrderDetail(userId);
-  return getMyOrder;
-};
 module.exports = {
   signUp,
   signInWithEmail,

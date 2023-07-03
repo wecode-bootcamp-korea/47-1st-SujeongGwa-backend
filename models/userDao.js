@@ -83,18 +83,6 @@ const getUserByAccount = async (account) => {
   }
 };
 
-const myOrderDetail = async function (userId) {
-  const orderDetail = await dataSource.query(
-    ` 
-SELECT 
-
-
-
-
-`
-  );
-};
-
 module.exports = {
   createUser,
   getUserByEmail,

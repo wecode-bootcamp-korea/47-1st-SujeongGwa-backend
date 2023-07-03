@@ -2,14 +2,15 @@ const { cartService } = require('../services');
 
 const getCartItems = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = 9;
     const result = await cartService.getCarts(userId);
-    return res.status(200).json(result);
+    if (result.length === 0) {
+      return res.status(200).json({ message: '카트가 비어있습니다.' });
+    } else {
+      return res.status(200).json(result);
+    }
   } catch (error) {
-    const errorMessage = 'DATABASE_QUERY_ERROR';
-    return res.status(500).json({
-      error: errorMessage,
-    });
+    return res.status(500).json({ message: 'Database error' });
   }
 };
 
