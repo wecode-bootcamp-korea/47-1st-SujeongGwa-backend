@@ -1,3 +1,4 @@
+const dataSource = require('./dataSource');
 const getDataSource = require('./dataSource');
 const uuid = require('uuid');
 
@@ -94,6 +95,7 @@ const createOrder = async (user_id, address) => {
     await queryRunner.commitTransaction();
 
     return order;
+
   } catch (error) {
     await queryRunner.rollbackTransaction();
     throw error;
@@ -102,6 +104,17 @@ const createOrder = async (user_id, address) => {
   }
 };
 
+const getCarts = async (userId) => {
+  const carts = await dataSource.query(
+    `SELECT * FROM carts
+    WHERE id = ?
+`,
+    [userId]
+  );
+  return carts;
+  
+};
 module.exports = {
   createOrder,
+  getCarts,
 };
