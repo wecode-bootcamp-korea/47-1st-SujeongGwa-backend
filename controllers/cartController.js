@@ -12,7 +12,7 @@ const postProductsInCart = async (req, res) => {
 };
 const patchProductsInCart = async (req,res) => {
     const {goods, quantity} = req.body;
-    const users = req.user;
+    const users = req.users;
     
     try{
         await cartService.patchProductsInCart(users,goods, quantity);
@@ -22,7 +22,7 @@ const patchProductsInCart = async (req,res) => {
     }
 }
 const deleteProductsInCart = async(req,res) => {
-    const users = req.user;
+    const users = req.users;
     const {goods} = req.body;
   
   try{
