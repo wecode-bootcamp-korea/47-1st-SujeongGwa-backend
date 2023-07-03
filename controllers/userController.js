@@ -59,13 +59,15 @@ const orderDetail = async function (req, res) {
     const result = await userService.orderDetail(userId);
 
     if (result.length === 0) {
-      return res.status(200).json({ message: 'Order list is empty' });
+      return res.status(200).json({ message: 'Orderlist is empty' });
     } else {
       return res.status(200).json({ data: result });
     }
-  } catch (error) {
-    return res.status(500).json({ message: 'Database error' });
-  }
+  } catch (err) {
+    console.error(err);
+    return await res
+      .status(err.statusCode || 400)
+      .json({ message: err.message });
 };
 
 module.exports = {
