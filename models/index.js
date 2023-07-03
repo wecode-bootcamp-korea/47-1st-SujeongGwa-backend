@@ -4,6 +4,6 @@ const orderDao = require("./orderDao");
 
 module.exports = {
   dataSource,
-  orderDao,
   userDao,
+  cartDao,
 };
