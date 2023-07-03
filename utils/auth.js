@@ -12,6 +12,7 @@ const loginRequired = async (req, res, next) => {
     }
 
     const payload = jwt.verify(accessToken, process.env.JWT_SECRET);
+    const { eamil, account } = payload;
 
     req.user = payload;
     next();
