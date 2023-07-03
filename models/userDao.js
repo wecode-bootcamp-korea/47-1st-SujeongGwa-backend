@@ -1,4 +1,32 @@
-const dataSource = require("./dataSource");
+const dataSource = require('./dataSource');
+
+const createUser = async function (
+  typeId,
+  name,
+  email,
+  hashedPassword,
+  account
+) {
+  try {
+    const result = await dataSource.query(
+      `INSERT INTO 
+              users(
+              type_id,
+              name,
+              email,
+              password,
+              account
+              ) VALUES (?, ?, ?, ?, ?);
+          `,
+      [typeId, name, email, hashedPassword, account]
+    );
+    return result;
+  } catch (err) {
+    const error = new Error('INVALID_DATA_INPUT');
+    error.statusCode = 400;
+    throw error;
+  }
+};
 
 const getUserByEmail = async (email) => {
   try {
@@ -20,7 +48,7 @@ const getUserByEmail = async (email) => {
 
     return result;
   } catch (error) {
-    console.error("INVALID_INPUT_DATA", error);
+    console.error('INVALID_INPUT_DATA', error);
     error.statusCode = 400;
 
     throw error;
@@ -47,7 +75,7 @@ const getUserByAccount = async (account) => {
 
     return [result];
   } catch (error) {
-    console.error("INVALID_INPUT_DATA", error);
+    console.error('INVALID_INPUT_DATA', error);
     error.statusCode = 400;
 
     throw error;
@@ -55,6 +83,7 @@ const getUserByAccount = async (account) => {
 };
 
 module.exports = {
+  createUser,
   getUserByEmail,
   getUserByAccount,
 };
