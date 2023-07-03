@@ -88,9 +88,9 @@ const myaccount = async (userId) => {
       `
       SELECT
       users.id AS myId,
-      users.name AS myname,
+      users.name AS myName,
       users.email AS myEmail,
-      users.password AS mypassword,
+      users.password AS mPassword,
       orders.address AS myAddress
     FROM
       users
