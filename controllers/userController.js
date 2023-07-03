@@ -52,7 +52,18 @@ const signIn = async (req, res) => {
     res.status(error.statusCode || 401).json({ message: error.message });
   }
 };
+
+const orderDetail = async function (req, res) {
+  try {
+    const userId = 4;
+    const result = await userService.orderDetail(userId);
+    return res.status(200).json(result);
+  } catch (error) {
+    res.status(500).json({ message: 'Database_error' });
+  }
+};
 module.exports = {
   signUp,
   signIn,
+  orderDetail,
 };
