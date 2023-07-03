@@ -3,11 +3,10 @@ const appDataSource = require("./dataSource");
 const goodsDao = async(category_id) => {
     try{
         let result = ``;
-        console.log("category_id:", typeof(category_id), category_id);
         if(Number(category_id) <=9 && Number(category_id) >= 1){
             result = await appDataSource.query(
                 `
-                SELECT products.image_url 
+                SELECT *
                 FROM products
                 WHERE products.sub_category_id = ?
                 `,[category_id]
@@ -19,13 +18,8 @@ const goodsDao = async(category_id) => {
                 throw error
                 
         }
-        const len = result.length;
-        const urlArr = new Array(len).fill('');
-        for(let i=0;i<len;i++){
-            const url = "https://raw.githubusercontent.com/Teachsue/Image_URL/main/"+result[i].image_url.split('/')[7];
-            urlArr[i] = url;
-        }
-        return urlArr;
+        
+        return result;
     }catch(err){
         const error = new Error('INVALID_DATA_INPUT');
         error.statusCode = 400;
