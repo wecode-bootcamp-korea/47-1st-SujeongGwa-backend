@@ -2,7 +2,7 @@ const { cartService } = require('../services');
 
 const getCartItems = async (req, res) => {
   try {
-    const userId = 9;
+    const userId = req.user.id;
     const result = await cartService.getCarts(userId);
     if (result.length === 0) {
       return res.status(200).json({ message: '카트가 비어있습니다.' });
