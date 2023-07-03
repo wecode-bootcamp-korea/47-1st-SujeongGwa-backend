@@ -5,10 +5,9 @@ const creatCart = async (productId, quantity) => {
     const carts = await dataSource.query(
       `INSERT INTO 
         carts (
-        user_id, 
         product_id, 
         quantity
-        ) VALUES (?,?,?)`,
+        ) VALUES (?,?)`,
       [productId, quantity]
     );
 
