@@ -5,7 +5,7 @@ const getCartItems = async (req, res) => {
     const userId = req.user;
     const result = await cartService.getCarts(userId);
     if (result.length === 0) {
-      return res.status(200).json({ message: 'Cart is empty' });
+      return res.status(200).json([]);
     } else {
       return res.status(200).json(result);
     }

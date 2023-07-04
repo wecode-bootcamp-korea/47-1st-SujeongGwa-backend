@@ -32,7 +32,7 @@ const queryCartItems = async (userId) => {
     return data;
   } catch (err) {
     const error = new Error('DATABASE_QUERY_ERROR');
-    error.statusCode = 500;
+    error.statusCode = 400;
     throw error;
   }
 };
