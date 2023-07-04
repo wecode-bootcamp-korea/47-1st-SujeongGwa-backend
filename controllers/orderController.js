@@ -4,11 +4,11 @@ const createOrder = async (req, res) => {
   try {
     const userId = req.user;
     const { address } = req.body;
+    const orderInfo = await orderService.createOrder(userId, address);
 
-    await orderService.createOrder(userId, address);
-    res.status(200).json(postOrder);
+    res.status(200).json({ data: orderInfo });
   } catch (error) {
-    res.status(400).json({ message: 'INVALID USER OR INPUT' });
+    res.status(error.statusCode || 400).json({ message: error.message });
   }
 };
 

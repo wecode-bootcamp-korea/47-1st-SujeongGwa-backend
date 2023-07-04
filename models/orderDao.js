@@ -54,11 +54,59 @@ const createOrder = async (userId, address, totalPrice, totalWeight, carts) => {
     );
 
     await queryRunner.commitTransaction();
-   const orderInfo = await queryRunner.query(
-    `SELECT product_id, 
-    FROM orders
-   )
-    return order;
+
+    const rawOrderInfo = await queryRunner.query(
+      `SELECT
+      orders.order_number,
+      orders.total_price,
+      orders.total_weight,
+      orders.address,
+      users.name,
+      users.email,
+      order_detail.product_id,
+      order_detail.quantity,
+      products.name AS product_name,
+      products.surface_type_id
+     FROM
+      orders
+     JOIN
+      users 
+      ON 
+      orders.user_id = users.id
+     JOIN
+      order_detail 
+     ON 
+      orders.id = order_detail.order_id
+     JOIN
+      products 
+     ON 
+      order_detail.product_id = products.id
+     WHERE
+      orders.id = ?;
+    `,
+      [orderId]
+    );
+
+    const orderInfo = {
+      order_number: rawOrderInfo[0].order_number,
+      total_price: rawOrderInfo[0].total_price,
+      total_weight: rawOrderInfo[0].total_weight,
+      address: rawOrderInfo[0].address,
+      name: rawOrderInfo[0].name,
+      email: rawOrderInfo[0].email,
+      products: [],
+    };
+
+    for (const item of rawOrderInfo) {
+      orderInfo.products.push({
+        product_id: item.product_id,
+        quantity: item.quantity,
+        name: item.product_name,
+        surface_type_id: item.surface_type_id,
+      });
+    }
+
+    return orderInfo;
   } catch (error) {
     await queryRunner.rollbackTransaction();
     throw error;

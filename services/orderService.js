@@ -26,7 +26,7 @@ const createOrder = async (userId, address) => {
       throw error;
     }
 
-    const postOrder = await orderDao.createOrder(
+    const postInfo = await orderDao.createOrder(
       userId,
       address,
       totalPrice,
@@ -34,7 +34,7 @@ const createOrder = async (userId, address) => {
       carts
     );
 
-    return postOrder;
+    return postInfo;
   } catch (error) {
     console.error('INVALID_INPUT_DATA', error);
     throw error;
