@@ -2,15 +2,18 @@ const { cartService } = require('../services');
 
 const getCartItems = async (req, res) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user;
     const result = await cartService.getCarts(userId);
     if (result.length === 0) {
-      return res.status(200).json({ message: '카트가 비어있습니다.' });
+      return res.status(200).json({ message: 'Cart is empty' });
     } else {
       return res.status(200).json(result);
     }
-  } catch (error) {
-    return res.status(500).json({ message: 'Database error' });
+  } catch (err) {
+    console.error(err);
+    return await res
+      .status(err.statusCode || 400)
+      .json({ message: err.message });
   }
 };
 
