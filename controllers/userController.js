@@ -56,10 +56,10 @@ const signIn = async (req, res) => {
 const orderDetail = async function (req, res) {
   try {
     const userId = req.user;
-    const result = await userService.orderDetail(userId);
+    const result = await userService.getOrderList(userId);
 
     if (result.length === 0) {
-      return res.status(200).json({ message: 'Orderlist is empty' });
+      return res.status(200).json([]);
     } else {
       return res.status(200).json({ data: result });
     }

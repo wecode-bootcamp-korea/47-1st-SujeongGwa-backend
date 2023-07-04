@@ -87,36 +87,24 @@ const orderlist = async function (userId) {
     const myOrderlist = await dataSource.query(
       `
       SELECT
+      o.order_number AS orderNumber,
       JSON_ARRAYAGG(
-        JSON_OBJECT(
-          'name', p.name,
-          'price', p.price,
-          'sizeId', p.sub_category_id,
-          'mainName', CONCAT(
-            CASE
-              WHEN p.sub_category_id IN (1, 2, 3, 4, 5) THEN CONCAT('P_', p.sub_category_id)
-              WHEN p.sub_category_id IN (6, 7) THEN CONCAT('W_', p.sub_category_id - 5)
-              WHEN p.sub_category_id IN (8, 9) THEN CONCAT('F_', p.sub_category_id - 7)
-              ELSE ''
-            END,
-            '_',
-            p.name,
-            '_',
-            p.surface_type_id
-          ),
-          'image_url', p.image_url,
-          'product_id', p.id,
-          'surface_type_id', p.surface_type_id
-        )
-      ) AS data,
-      o.order_number
-    FROM
+          JSON_OBJECT(
+              'name', p.name,
+              'price', p.price,
+              'sizeId', p.sub_category_id,
+              'imageUrl', p.image_url,
+              'productId', p.id,
+              'surfaceTypeId', p.surface_type_id
+          )
+      ) AS orderList
+  FROM
       orders o
       JOIN order_detail od ON o.id = od.order_id
       JOIN products p ON od.product_id = p.id
-    WHERE
+  WHERE
       o.user_id = ?
-    GROUP BY
+  GROUP BY
       o.order_number;
       `,
       [userId]
