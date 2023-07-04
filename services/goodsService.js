@@ -1,9 +1,9 @@
 const goodsDao = require("../models/goodsDao"); 
 
-const goodsService = async(category_id) => {
-    return goodsDao.goodsDao(category_id);
+const goodsService = async(categoryId) => {
+    return goodsDao.goodsDao(categoryId);
 }
-const goodsDetailService = async(category_id, name) => {
+const goodsDetailService = async(categoryId, name) => {
     return goodsDao.goodsDetailDao(name);
    
 }
