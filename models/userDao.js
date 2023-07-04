@@ -1,3 +1,4 @@
+const { query } = require('express');
 const dataSource = require('./dataSource');
 
 const createUser = async function (
@@ -103,7 +104,7 @@ const myaccount = async (userId) => {
   } catch (err) {
     console.log(err);
     const error = new Error('DATABASE_QUERY_ERROR');
-    error.statusCode = 500;
+    error.statusCode = 400;
     throw error;
   }
 };
