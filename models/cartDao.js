@@ -6,30 +6,33 @@ const queryCartItems = async (userId) => {
       `
       SELECT
       carts.id AS cartId,
+      users.id AS userId,
+      users.name,
+      users.email,
       carts.product_id AS productId,
       categories.title AS kindId,
       products.name AS tileName,
       products.sub_category_id AS sizeId,
       products.surface_type_id AS surfaceTypeId,
       products.price AS price,
-      products.weight AS weight
+      products.weight AS weight,
+      products.image_url AS imageUrl,
+      carts.quantity AS quantity 
     FROM
       carts
     JOIN
       products ON carts.product_id = products.id
     JOIN
       categories ON categories.id = products.sub_category_id
+    JOIN
+      users ON users.id = carts.user_id
     WHERE
       carts.user_id = ?
     GROUP BY
-      carts.id,
-      carts.product_id,
-      categories.title,
-      products.name,
       products.sub_category_id,
       products.surface_type_id,
       products.price,
-      products.weight;
+      products.weight;    
         `,
       [userId]
     );

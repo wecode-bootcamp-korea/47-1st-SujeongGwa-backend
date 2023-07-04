@@ -88,9 +88,9 @@ const createOrder = async (userId, address, totalPrice, totalWeight, carts) => {
     );
 
     const orderInfo = {
-      order_number: rawOrderInfo[0].order_number,
-      total_price: rawOrderInfo[0].total_price,
-      total_weight: rawOrderInfo[0].total_weight,
+      orderNumber: rawOrderInfo[0].order_number,
+      totalPrice: rawOrderInfo[0].total_price,
+      totalWeight: rawOrderInfo[0].total_weight,
       address: rawOrderInfo[0].address,
       name: rawOrderInfo[0].name,
       email: rawOrderInfo[0].email,
@@ -99,10 +99,10 @@ const createOrder = async (userId, address, totalPrice, totalWeight, carts) => {
 
     for (const item of rawOrderInfo) {
       orderInfo.products.push({
-        product_id: item.product_id,
+        productId: item.product_id,
         quantity: item.quantity,
         name: item.product_name,
-        surface_type_id: item.surface_type_id,
+        surfaceTypeId: item.surface_type_id,
       });
     }
 
