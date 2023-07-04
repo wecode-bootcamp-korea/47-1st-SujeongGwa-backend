@@ -3,8 +3,8 @@ require('dotenv').config();
 const express = require('express');
 const logger = require('morgan');
 const cors = require('cors');
-const DataSource = require('./models/dataSource');
 const route = require('./routes');
+const DataSource = require('./models/dataSource');
 
 const app = express();
 
