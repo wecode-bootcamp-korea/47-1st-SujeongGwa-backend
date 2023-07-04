@@ -5,4 +5,5 @@ const cartDao = require('./cartDao');
 module.exports = {
   dataSource,
   userDao,
+  cartDao,
 };
