@@ -52,6 +52,7 @@ const signIn = async (req, res) => {
     res.status(error.statusCode || 401).json({ message: error.message });
   }
 };
+
 module.exports = {
   signUp,
   signIn,
