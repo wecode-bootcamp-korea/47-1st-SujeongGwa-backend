@@ -55,7 +55,7 @@ const signIn = async (req, res) => {
 
 const getUserInfomation = async function (req, res) {
   try {
-    const userId = req.user.id;
+    const userId = req.user;
     const result = await userService.getmyaccount(userId);
     return res.status(200).json(result);
   } catch (err) {
