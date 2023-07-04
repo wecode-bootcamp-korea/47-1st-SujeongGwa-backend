@@ -16,7 +16,8 @@ const queryCartItems = async (userId) => {
       products.surface_type_id AS surfaceTypeId,
       products.price AS price,
       products.weight AS weight,
-      products.image_url AS imageUrl
+      products.image_url AS imageUrl,
+      carts.quantity AS quantity 
     FROM
       carts
     JOIN
@@ -35,7 +36,7 @@ const queryCartItems = async (userId) => {
       products.sub_category_id,
       products.surface_type_id,
       products.price,
-      products.weight;
+      products.weight;    
         `,
       [userId]
     );
