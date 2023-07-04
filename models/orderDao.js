@@ -1,21 +1,24 @@
 const dataSource = require('./dataSource');
 const uuid = require('uuid');
 
-const createOrder = async (userId, address, carts) => {
+const createOrder = async (userId, address, totalPrice, totalWeight, carts) => {
   const queryRunner = await dataSource.createQueryRunner();
-  const {
-    userPoint,
-    total_price: totalPrice,
-    total_weight: totalWeight,
-  } = await calculatePriceAndWeight(userId, carts);
 
   try {
     await queryRunner.startTransaction();
 
-    const newPoint = userPoint - totalPrice;
+    const updatePoints = await queryRunner.query(
+      `UPDATE 
+        users 
+      SET 
+        point = point - ? 
+      WHERE 
+        id = ?`,
+      [totalPrice, userId]
+    );
 
-    const order_number = uuid.v4();
-    const order_status_id = 2;
+    const orderNumber = uuid.v4();
+    const orderStatusId = 2;
 
     const order = await queryRunner.query(
       `INSERT INTO orders(
@@ -26,11 +29,27 @@ const createOrder = async (userId, address, carts) => {
         total_weight,
         address
       ) VALUES (?, ?, ?, ?, ?, ?)`,
-      [order_number, userId, order_status_id, totalPrice, totalWeight, address]
+      [orderNumber, userId, orderStatusId, totalPrice, totalWeight, address]
     );
 
+    const orderId = order.insertId;
+
+    for (const cart of carts) {
+      await queryRunner.query(
+        `INSERT INTO order_detail(
+          order_id,
+          product_id,
+          quantity
+        ) VALUES (?, ?, ?)`,
+        [orderId, cart.product_id, cart.quantity]
+      );
+    }
+
     const deleteResult = await queryRunner.query(
-      `DELETE FROM carts WHERE user_id = ?`,
+      `DELETE FROM 
+        carts 
+      WHERE 
+        user_id = ?`,
       [userId]
     );
 
@@ -45,57 +64,43 @@ const createOrder = async (userId, address, carts) => {
   }
 };
 
-const getCarts = async (userId) => {
-  const carts = await dataSource.query(
-    `SELECT 
-      product_id AS productId,
-      quantity 
-    FROM 
-      carts
-    WHERE 
-      user_id = ?`,
-    [userId]
-  );
-  return carts;
-};
-
-const calculatePriceAndWeight = async (userId, carts) => {
-  const user = await dataSource.query(
-    `SELECT 
-      point
-    FROM 
-      users
-    WHERE 
-      id = ?`,
-    [userId]
-  );
-
-  let total_price = 0;
-  let total_weight = 0;
-
-  for (const cart of carts) {
-    const product = await dataSource.query(
-      `SELECT * FROM 
-          products 
-        WHERE id = ?`,
-      [cart.productId]
-    );
-
-    const price = product[0].price;
-    const weight = product[0].weight;
-    total_price += price * cart.quantity;
-    total_weight += weight * cart.quantity;
-  }
+const getCarts = async (userId, carts) => {
+  const [user, cartItems] = await Promise.all([
+    dataSource.query(
+      `SELECT 
+        point 
+      FROM 
+        users 
+      WHERE 
+        id = ?`,
+      [userId]
+    ),
+    dataSource.query(
+      `SELECT 
+        carts.product_id,
+        products.id,
+        products.price,
+        products.weight,
+        carts.quantity 
+      FROM 
+        carts
+      JOIN
+        products
+      ON
+        carts.product_id = products.id
+      WHERE 
+        user_id = ?`,
+      [userId]
+    ),
+  ]);
 
   return {
     userPoint: user[0].point,
-    total_price,
-    total_weight,
+    carts: cartItems,
   };
 };
 
 module.exports = {
   createOrder,
   getCarts,
-  calculatePriceAndWeight,
 };

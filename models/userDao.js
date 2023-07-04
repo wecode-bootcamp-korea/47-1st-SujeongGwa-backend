@@ -1,3 +1,4 @@
+const { query } = require('express');
 const dataSource = require('./dataSource');
 
 const createUser = async function (
@@ -94,7 +95,7 @@ const getUserById = async (id) => {
       `,
       [id]
     );
-    return [userId];
+    return user;
   } catch (error) {
     console.error('INVALID_USER', error);
     error.statusCode = 400;
