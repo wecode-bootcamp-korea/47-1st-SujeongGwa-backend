@@ -7,5 +7,6 @@ router.post('/signup', userController.signUp);
 router.get('/orders', loginRequired, userController.orderDetail);
 
 router.post('/signin', userController.signIn);
+router.get('/information', loginRequired, userController.getUserInfomation);
 
 module.exports = router;
