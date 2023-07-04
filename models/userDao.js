@@ -89,7 +89,7 @@ const myaccount = async (userId) => {
       SELECT
       users.id AS myId,
       users.name AS myName,
-      users.email AS myEmail,
+      users.email AS myEmail
    
     FROM
       users
