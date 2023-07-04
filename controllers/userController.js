@@ -2,8 +2,8 @@ const { userService } = require('../services');
 
 const signUp = async (req, res) => {
   try {
-    const { type_id, name, email, password, account } = req.body;
-    
+    const { typeId, name, email, password, account } = req.body;
+
     if (!name || !email || !password) {
       const error = new Error(
         'KEY_ERROR: Missing required fields: name, email, password.'
@@ -18,12 +18,11 @@ const signUp = async (req, res) => {
       throw error;
     }
 
-    await userService.signUp(type_id, name, email, password, account);
+    await userService.signUp(typeId, name, email, password, account);
 
     return res.status(201).json({
       message: 'SIGNUP_SUCCESS',
     });
-    
   } catch (error) {
     return res
       .status(error.statusCode || 500)
@@ -32,7 +31,7 @@ const signUp = async (req, res) => {
 };
 
 const signIn = async (req, res) => {
-  const { type_id, email, account, password } = req.body;
+  const { typeId, email, account, password } = req.body;
 
   try {
     let accessToken;
@@ -42,7 +41,7 @@ const signIn = async (req, res) => {
       CORPORATION: 3,
     });
 
-    if (type_id === userTypeEnum.NORMAL_USER) {
+    if (typeId === userTypeEnum.NORMAL_USER) {
       accessToken = await userService.signInWithEmail(email, password);
     } else {
       accessToken = await userService.signInWithAccount(account, password);

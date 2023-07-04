@@ -17,7 +17,7 @@ app.get('/ping', function (req, res) {
   res.json({ message: 'pong' });
 });
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, async () => {
   await DataSource.initialize()

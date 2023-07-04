@@ -1,66 +1,17 @@
 const dataSource = require('./dataSource');
-const getDataSource = require('./dataSource');
 const uuid = require('uuid');
 
-const createOrder = async (user_id, address) => {
-  const queryRunner = await getDataSource.createQueryRunner();
+const createOrder = async (userId, address, carts) => {
+  const queryRunner = await dataSource.createQueryRunner();
+  const { userPoint, total_price: totalPrice } = await calculatePrice(
+    userId,
+    carts
+  );
 
   try {
     await queryRunner.startTransaction();
 
-    const user = await queryRunner.query(
-      `SELECT 
-       point 
-      FROM 
-       users 
-      WHERE id = ?`,
-      [user_id]
-    );
-    const userPoint = user[0].point;
-
-    const carts = await queryRunner.query(
-      `SELECT * FROM 
-        carts 
-      WHERE 
-        user_id = ?`,
-      [user_id]
-    );
-
-    if (carts.length === 0) {
-      throw new Error('Cart is empty');
-    }
-
-    let total_price = 0;
-    let total_weight = 0;
-    for (const cart of carts) {
-      const product = await queryRunner.query(
-        `SELECT * FROM 
-          products 
-        WHERE id = ?`,
-        [cart.product_id]
-      );
-
-      total_price += product[0].price * cart.quantity;
-      total_weight += product[0].weight * cart.quantity;
-    }
-
-    if (userPoint < total_price) {
-      const error = new Error('Not enough points to complete this purchase');
-      error.statusCode = 400;
-      throw error;
-    }
-
-    const newPoint = userPoint - total_price;
-    await queryRunner.query(
-      `
-    UPDATE 
-     users 
-    SET
-     point = ? 
-    WHERE 
-     id = ?`,
-      [newPoint, user_id]
-    );
+    const newPoint = userPoint - totalPrice;
 
     const order_number = uuid.v4();
     const order_status_id = 1;
@@ -71,31 +22,19 @@ const createOrder = async (user_id, address) => {
         user_id,
         order_status_id,
         total_price,
-        total_weight,
         address
-      )VALUES(?,?,?,?,?,?)`,
-      [
-        order_number,
-        user_id,
-        order_status_id,
-        total_price,
-        total_weight,
-        address,
-      ]
+      ) VALUES (?, ?, ?, ?, ?)`,
+      [order_number, userId, order_status_id, totalPrice, address]
     );
 
-    await queryRunner.query(
-      `DELETE FROM 
-        carts
-      WHERE 
-       user_id = ?`,
-      [user_id]
+    const deleteResult = await queryRunner.query(
+      `DELETE FROM carts WHERE user_id = ?`,
+      [userId]
     );
 
     await queryRunner.commitTransaction();
 
     return order;
-
   } catch (error) {
     await queryRunner.rollbackTransaction();
     throw error;
@@ -106,15 +45,51 @@ const createOrder = async (user_id, address) => {
 
 const getCarts = async (userId) => {
   const carts = await dataSource.query(
-    `SELECT * FROM carts
-    WHERE id = ?
-`,
+    `SELECT 
+      product_id AS productId,
+      quantity 
+    FROM 
+      carts
+    WHERE 
+      user_id = ?`,
     [userId]
   );
   return carts;
-  
 };
+
+const calculatePrice = async (userId, carts) => {
+  const user = await dataSource.query(
+    `SELECT 
+      point
+    FROM 
+      users
+    WHERE 
+      id = ?`,
+    [userId]
+  );
+
+  let total_price = 0;
+
+  for (const cart of carts) {
+    const product = await dataSource.query(
+      `SELECT * FROM 
+          products 
+        WHERE id = ?`,
+      [cart.productId]
+    );
+
+    const price = product[0].price;
+    total_price += price * cart.quantity;
+  }
+
+  return {
+    userPoint: user[0].point,
+    total_price,
+  };
+};
+
 module.exports = {
   createOrder,
   getCarts,
+  calculatePrice,
 };

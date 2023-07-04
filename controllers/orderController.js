@@ -1,10 +1,10 @@
 const { orderService } = require('../services');
 
 const createOrder = async (req, res) => {
-  const userId = req.user;
-  const { address } = req.body;
-
   try {
+    const userId = req.user;
+    const { address } = req.body;
+
     await orderService.createOrder(userId, address);
     res.status(200).json({ message: 'Success Post Orders' });
   } catch (error) {
