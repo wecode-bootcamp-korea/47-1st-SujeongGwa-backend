@@ -9,7 +9,7 @@ const createOrder = async (userId, address) => {
       throw error;
     }
     
-    const {userPoint, totalPrice} = await orderDao.calculatePrice(userId, carts);
+    const {userPoint, totalPrice} = await orderDao.calculatePriceAndWeight(userId, carts);
     if (userPoint < totalPrice) {
       const error = new Error('Not enough points to complete this purchase');
       error.statusCode = 400;
