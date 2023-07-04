@@ -2,7 +2,7 @@ const { userService } = require('../services');
 
 const signUp = async (req, res) => {
   try {
-    const { type_id, name, email, password, account } = req.body;
+    const { typeId, name, email, password, account } = req.body;
 
     if (!name || !email || !password) {
       const error = new Error(
@@ -18,7 +18,7 @@ const signUp = async (req, res) => {
       throw error;
     }
 
-    await userService.signUp(type_id, name, email, password, account);
+    await userService.signUp(typeId, name, email, password, account);
 
     return res.status(201).json({
       message: 'SIGNUP_SUCCESS',
