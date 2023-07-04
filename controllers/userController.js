@@ -71,4 +71,5 @@ module.exports = {
   signUp,
   signIn,
   orderDetail,
+  orderDetail,
 };
