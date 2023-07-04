@@ -1,3 +1,4 @@
+const { query } = require('express');
 const dataSource = require('./dataSource');
 
 const createUser = async function (

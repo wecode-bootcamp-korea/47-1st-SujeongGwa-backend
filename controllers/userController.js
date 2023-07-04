@@ -18,7 +18,7 @@ const signUp = async (req, res) => {
       throw error;
     }
 
-    await userService.signUp(type_id, name, email, password, account);
+    await userService.signUp(typeId, name, email, password, account);
 
     return res.status(201).json({
       message: 'SIGNUP_SUCCESS',
@@ -52,6 +52,7 @@ const signIn = async (req, res) => {
     res.status(error.statusCode || 401).json({ message: error.message });
   }
 };
+
 module.exports = {
   signUp,
   signIn,
