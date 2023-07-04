@@ -74,5 +74,4 @@ module.exports = {
   createCart,
   getProductById,
   queryCartItems,
-  dataSource,
 };

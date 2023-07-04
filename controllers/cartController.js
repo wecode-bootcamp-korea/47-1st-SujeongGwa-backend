@@ -14,8 +14,6 @@ const getCartItems = async (req, res) => {
   }
 };
 
-module.exports = { getCartItems };
-
 const createCart = async (req, res) => {
   const { productId, quantity } = req.body;
   const userId = req.user;
