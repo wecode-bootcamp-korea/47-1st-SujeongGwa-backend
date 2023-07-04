@@ -83,8 +83,35 @@ const getUserByAccount = async (account) => {
   }
 };
 
+const myaccount = async (userId) => {
+  try {
+    const data = await dataSource.query(
+      `
+      SELECT
+      users.id AS myId,
+      users.name AS myName,
+      users.email AS myEmail
+   
+    FROM
+      users
+      INNER JOIN orders ON users.id = orders.user_id
+    WHERE
+      users.id = ?
+      `,
+      [userId]
+    );
+    return data;
+  } catch (err) {
+    console.log(err);
+    const error = new Error('DATABASE_QUERY_ERROR');
+    error.statusCode = 400;
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
   getUserByAccount,
+  myaccount,
 };
