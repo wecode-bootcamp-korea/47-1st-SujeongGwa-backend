@@ -83,7 +83,7 @@ const getUserByAccount = async (account) => {
   }
 };
 
-const myaccount = async (userId) => {
+const myAccount = async (userId) => {
   try {
     const data = await dataSource.query(
       `
@@ -94,7 +94,6 @@ const myaccount = async (userId) => {
    
     FROM
       users
-      INNER JOIN orders ON users.id = orders.user_id
     WHERE
       users.id = ?
       `,
@@ -113,5 +112,5 @@ module.exports = {
   createUser,
   getUserByEmail,
   getUserByAccount,
-  myaccount,
+  myAccount,
 };
