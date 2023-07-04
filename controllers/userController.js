@@ -58,11 +58,7 @@ const orderDetail = async function (req, res) {
     const userId = req.user;
     const result = await userService.getOrderList(userId);
 
-    if (result.length === 0) {
-      return res.status(200).json([]);
-    } else {
-      return res.status(200).json({ data: result });
-    }
+    return res.status(200).json({ data: result });
   } catch (err) {
     console.error(err);
     return await res
