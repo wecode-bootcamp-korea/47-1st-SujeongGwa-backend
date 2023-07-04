@@ -1,4 +1,3 @@
-const { query } = require('express');
 const dataSource = require('./dataSource');
 
 const createUser = async function (
@@ -83,7 +82,7 @@ const getUserByAccount = async (account) => {
   }
 };
 
-const myaccount = async (userId) => {
+const myAccount = async (userId) => {
   try {
     const data = await dataSource.query(
       `
@@ -134,6 +133,6 @@ module.exports = {
   createUser,
   getUserByEmail,
   getUserByAccount,
-  myaccount,
+  myAccount,
   getUserById,
 };
