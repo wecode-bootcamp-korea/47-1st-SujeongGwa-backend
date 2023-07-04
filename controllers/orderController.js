@@ -6,7 +6,7 @@ const createOrder = async (req, res) => {
     const { address } = req.body;
 
     await orderService.createOrder(userId, address);
-    res.status(200).json({ message: 'SUCCESS_POST_ORDER' });
+    res.status(200).json(postOrder);
   } catch (error) {
     res.status(400).json({ message: 'INVALID USER OR INPUT' });
   }

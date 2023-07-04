@@ -54,7 +54,10 @@ const createOrder = async (userId, address, totalPrice, totalWeight, carts) => {
     );
 
     await queryRunner.commitTransaction();
-
+   const orderInfo = await queryRunner.query(
+    `SELECT product_id, 
+    FROM orders
+   )
     return order;
   } catch (error) {
     await queryRunner.rollbackTransaction();
