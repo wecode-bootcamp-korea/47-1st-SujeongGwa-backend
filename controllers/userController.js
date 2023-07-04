@@ -55,7 +55,7 @@ const signIn = async (req, res) => {
 
 const orderDetail = async function (req, res) {
   try {
-    const userId = req.user.id;
+    const userId = req.user;
     const result = await userService.orderDetail(userId);
 
     if (result.length === 0) {
