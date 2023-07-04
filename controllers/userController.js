@@ -31,7 +31,7 @@ const signUp = async (req, res) => {
 };
 
 const signIn = async (req, res) => {
-  const { type_id, email, account, password } = req.body;
+  const { typeId, email, account, password } = req.body;
 
   try {
     let accessToken;
@@ -41,7 +41,7 @@ const signIn = async (req, res) => {
       CORPORATION: 3,
     });
 
-    if (type_id === userTypeEnum.NORMAL_USER) {
+    if (typeId === userTypeEnum.NORMAL_USER) {
       accessToken = await userService.signInWithEmail(email, password);
     } else {
       accessToken = await userService.signInWithAccount(account, password);
