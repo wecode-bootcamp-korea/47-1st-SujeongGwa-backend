@@ -1,5 +1,6 @@
 # Created by https://www.toptal.com/developers/gitignore/api/visualstudiocode,vim,webstorm,macos,linux,windows,zsh,node
 # Edit at https://www.toptal.com/developers/gitignore?templates=visualstudiocode,vim,webstorm,macos,linux,windows,zsh,node
+.prettierrc
 
 .env
 db/schema.sql
