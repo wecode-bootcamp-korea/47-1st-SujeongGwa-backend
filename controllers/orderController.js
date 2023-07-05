@@ -6,7 +6,7 @@ const createOrder = async (req, res) => {
     const { address } = req.body;
     const orderInfo = await orderService.createOrder(userId, address);
 
-    res.status(200).json({ data: orderInfo ,message: "SUCCESS_CREATE_ORDER"});
+    res.status(200).json({ data: orderInfo, message: 'SUCCESS_CREATE_ORDER' });
   } catch (error) {
     res.status(error.statusCode || 400).json({ message: error.message });
   }
