@@ -98,8 +98,8 @@ const signInWithAccount = async (account, password) => {
   return accessToken;
 };
 
-const getmyaccount = async (userId) => {
-  const myAccont = await userDao.myaccount(userId);
+const getMyAccount = async (userId) => {
+  const myAccont = await userDao.myAccount(userId);
   return myAccont;
 };
 
@@ -107,5 +107,5 @@ module.exports = {
   signUp,
   signInWithEmail,
   signInWithAccount,
-  getmyaccount,
+  getMyAccount,
 };
