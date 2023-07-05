@@ -2,7 +2,6 @@ const appDataSource = require("./dataSource");
 
 const goodsDao = async(goodsDaoByCategoryId) => {
     try{
-            //result : 상품들을 goodsDaoByCategoryId 에 따라 분류한 query
         const result = await appDataSource.query(
             `
             SELECT *
