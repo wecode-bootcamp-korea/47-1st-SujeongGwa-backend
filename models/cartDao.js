@@ -78,8 +78,35 @@ const getProductById = async (productId) => {
   return product;
 };
 
+const getCarts = async (userId) => {
+  const [cartItems] = await Promise.all([
+    dataSource.query(
+      `SELECT 
+        carts.product_id,
+        products.id,
+        products.price,
+        products.weight,
+        carts.quantity 
+      FROM 
+        carts
+      JOIN
+        products
+      ON
+        carts.product_id = products.id
+      WHERE 
+        user_id = ?`,
+      [userId]
+    ),
+  ]);
+
+  return {
+    carts: cartItems,
+  };
+};
+
 module.exports = {
   createCart,
   getProductById,
   queryCartItems,
+  getCarts,
 };

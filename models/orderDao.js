@@ -1,24 +1,20 @@
 const dataSource = require('./dataSource');
 const uuid = require('uuid');
 
-const createOrder = async (userId, address, totalPrice, totalWeight, carts) => {
+const createOrder = async (
+  userId,
+  address,
+  totalPrice,
+  totalWeight,
+  carts,
+  orderStatusEnum
+) => {
   const queryRunner = await dataSource.createQueryRunner();
 
   try {
     await queryRunner.startTransaction();
 
-    const updatePoints = await queryRunner.query(
-      `UPDATE 
-        users 
-      SET 
-        point = point - ? 
-      WHERE 
-        id = ?`,
-      [totalPrice, userId]
-    );
-
     const orderNumber = uuid.v4();
-    const orderStatusId = 2;
 
     const order = await queryRunner.query(
       `INSERT INTO orders(
@@ -29,7 +25,14 @@ const createOrder = async (userId, address, totalPrice, totalWeight, carts) => {
         total_weight,
         address
       ) VALUES (?, ?, ?, ?, ?, ?)`,
-      [orderNumber, userId, orderStatusId, totalPrice, totalWeight, address]
+      [
+        orderNumber,
+        userId,
+        orderStatusEnum.BEFORE_PURCHASE,
+        totalPrice,
+        totalWeight,
+        address,
+      ]
     );
 
     const orderId = order.insertId;
@@ -45,6 +48,26 @@ const createOrder = async (userId, address, totalPrice, totalWeight, carts) => {
       );
     }
 
+    const updatePoints = await queryRunner.query(
+      `UPDATE 
+        users 
+      SET 
+        point = point - ? 
+      WHERE 
+        id = ?`,
+      [totalPrice, userId]
+    );
+
+    const afterPurchase = await queryRunner.query(
+      `UPDATE  
+        orders
+      SET 
+       order_status_id = ?
+      WHERE 
+        id = ?`,
+      [orderStatusEnum.AFTER_PURCHASE, orderId]
+    );
+
     const deleteResult = await queryRunner.query(
       `DELETE FROM 
         carts 
@@ -55,56 +78,55 @@ const createOrder = async (userId, address, totalPrice, totalWeight, carts) => {
 
     await queryRunner.commitTransaction();
 
-    const rawOrderInfo = await queryRunner.query(
+    const [rawOrderInfo] = await queryRunner.query(
       `SELECT
-      orders.order_number,
-      orders.total_price,
-      orders.total_weight,
-      orders.address,
-      users.name,
-      users.email,
-      order_detail.product_id,
-      order_detail.quantity,
-      products.name AS product_name,
-      products.surface_type_id
-     FROM
+        orders.id AS orderId,
+        orders.order_number AS orderNumber,
+        orders.total_price AS totalPrice,
+        orders.total_weight AS totalWeight,
+        orders.address,
+        users.name AS name,
+        users.email AS email,
+      JSON_ARRAYAGG(
+        JSON_OBJECT(
+          'productId', order_detail.product_id,
+          'quantity', order_detail.quantity,
+          'productName', products.name,
+          'surfaceTypeId', products.surface_type_id
+        )
+      ) AS products
+    FROM
       orders
-     JOIN
+    JOIN
       users 
-      ON 
+    ON 
       orders.user_id = users.id
-     JOIN
+    JOIN
       order_detail 
-     ON 
+    ON 
       orders.id = order_detail.order_id
-     JOIN
+    JOIN
       products 
-     ON 
+    ON 
       order_detail.product_id = products.id
-     WHERE
-      orders.id = ?;
+    WHERE
+      orders.id = ?
+    GROUP BY
+      orders.id;
     `,
       [orderId]
     );
 
     const orderInfo = {
-      orderNumber: rawOrderInfo[0].order_number,
-      totalPrice: rawOrderInfo[0].total_price,
-      totalWeight: rawOrderInfo[0].total_weight,
-      address: rawOrderInfo[0].address,
-      name: rawOrderInfo[0].name,
-      email: rawOrderInfo[0].email,
-      products: [],
+      orderId: rawOrderInfo.orderId,
+      orderNumber: rawOrderInfo.orderNumber,
+      totalPrice: rawOrderInfo.totalPrice,
+      totalWeight: rawOrderInfo.totalWeight,
+      address: rawOrderInfo.address,
+      name: rawOrderInfo.name,
+      email: rawOrderInfo.email,
+      products: rawOrderInfo.products,
     };
-
-    for (const item of rawOrderInfo) {
-      orderInfo.products.push({
-        productId: item.product_id,
-        quantity: item.quantity,
-        name: item.product_name,
-        surfaceTypeId: item.surface_type_id,
-      });
-    }
 
     return orderInfo;
   } catch (error) {
@@ -115,43 +137,6 @@ const createOrder = async (userId, address, totalPrice, totalWeight, carts) => {
   }
 };
 
-const getCarts = async (userId, carts) => {
-  const [user, cartItems] = await Promise.all([
-    dataSource.query(
-      `SELECT 
-        point 
-      FROM 
-        users 
-      WHERE 
-        id = ?`,
-      [userId]
-    ),
-    dataSource.query(
-      `SELECT 
-        carts.product_id,
-        products.id,
-        products.price,
-        products.weight,
-        carts.quantity 
-      FROM 
-        carts
-      JOIN
-        products
-      ON
-        carts.product_id = products.id
-      WHERE 
-        user_id = ?`,
-      [userId]
-    ),
-  ]);
-
-  return {
-    userPoint: user[0].point,
-    carts: cartItems,
-  };
-};
-
 module.exports = {
   createOrder,
-  getCarts,
 };

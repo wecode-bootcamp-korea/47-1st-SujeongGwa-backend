@@ -1,8 +1,11 @@
 const orderDao = require('../models/orderDao');
+const userDao = require('../models/userDao');
+const cartDao = require('../models/cartDao');
 
-const createOrder = async (userId, address) => {
+const createOrder = async (userId, address, orderStatusEnum) => {
   try {
-    const { userPoint, carts } = await orderDao.getCarts(userId);
+    const userPoint = await userDao.myAccount(userId);
+    const { carts } = await cartDao.getCarts(userId);
 
     if (carts.length === 0) {
       const error = new Error('Cart is empty');
@@ -10,28 +13,43 @@ const createOrder = async (userId, address) => {
       throw error;
     }
 
-    let totalPrice = 0;
-    let totalWeight = 0;
-
-    for (const cart of carts) {
+    const cartItems = carts.map((cart) => {
       const price = cart.price;
       const weight = cart.weight;
-      totalPrice += price * cart.quantity;
-      totalWeight += weight * cart.quantity;
-    }
+      const quantity = cart.quantity;
+      const totalPrice = price * quantity;
+      const totalWeight = weight * quantity;
 
-    if (userPoint < totalPrice) {
-      const error = new Error('Not enough points to complete this purchase');
-      error.statusCode = 400;
-      throw error;
-    }
+      if (userPoint < totalPrice) {
+        const error = new Error('Not enough points to complete this purchase');
+        error.statusCode = 400;
+        throw error;
+      }
+      return {
+        price,
+        weight,
+        quantity,
+        totalPrice,
+        totalWeight,
+      };
+    });
+
+    const totalPrice = cartItems.reduce(
+      (acc, item) => acc + item.totalPrice,
+      0
+    );
+    const totalWeight = cartItems.reduce(
+      (acc, item) => acc + item.totalWeight,
+      0
+    );
 
     const postInfo = await orderDao.createOrder(
       userId,
       address,
       totalPrice,
       totalWeight,
-      carts
+      carts,
+      orderStatusEnum
     );
 
     return postInfo;
