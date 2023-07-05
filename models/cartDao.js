@@ -99,9 +99,9 @@ const postProductsInCart = async (userId, productId, quantity) => {
 const patchProductsInCart = async(user_id,product_name, quantity)=>{
     try{
         if(quantity == 0){
-            console.error("0개 미만으로는 숫자를 변경할 수 없습니다.",error)
-            error.statusCode = 400;
-            throw error;
+            const err = new Error("0개 미만으로는 숫자를 변경할 수 없습니다.",error)
+            err.statusCode = 400;
+            throw err;
         }
       const cartPatch = await dataSource.query(
           `
