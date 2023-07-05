@@ -1,4 +1,3 @@
-const { query } = require('express');
 const dataSource = require('./dataSource');
 
 const createUser = async function (
@@ -16,8 +15,9 @@ const createUser = async function (
               name,
               email,
               password,
-              account
-              ) VALUES (?, ?, ?, ?, ?);
+              account,
+              point
+              ) VALUES (?, ?, ?, ?, ?,1000000);
           `,
       [typeId, name, email, hashedPassword, account]
     );
@@ -83,8 +83,34 @@ const getUserByAccount = async (account) => {
   }
 };
 
+const myAccount = async (userId) => {
+  try {
+    const data = await dataSource.query(
+      `
+      SELECT
+      users.id AS myId,
+      users.name AS myName,
+      users.email AS myEmail
+   
+    FROM
+      users
+    WHERE
+      users.id = ?
+      `,
+      [userId]
+    );
+    return data;
+  } catch (err) {
+    console.log(err);
+    const error = new Error('DATABASE_QUERY_ERROR');
+    error.statusCode = 400;
+    throw error;
+  }
+};
+
 module.exports = {
   createUser,
   getUserByEmail,
   getUserByAccount,
+  myAccount,
 };
