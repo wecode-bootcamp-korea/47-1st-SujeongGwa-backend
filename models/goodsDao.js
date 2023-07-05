@@ -6,6 +6,8 @@ const goodsDao = async(goodsDaoByCategoryId) => {
             `
             SELECT *
             FROM products
+            JOIN sub_categories ON products.sub_category_id = sub_categories.id
+            JOIN categories ON sub_categories.category_id = categories.id
             WHERE products.sub_category_id = ?
             `,[goodsDaoByCategoryId]
         

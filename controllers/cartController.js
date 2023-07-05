@@ -29,40 +29,29 @@ const createCart = async (req, res) => {
       .json({ message: error.message || 'INVALID_INPUT' });
   }
 };
-
-const postProductsInCart = async (req, res) => {
-  const { userId, productId, quantity } = req.body;
-
-  try {
-    await cartService.postProductsInCart(userId, productId, quantity);
-    res.status(200).json({ message: "Success Post Products" });
-  } catch (error) {
-    res.status(400).json({ message: "IVALID_INPUT" });
-  }
-};
 const patchProductsInCart = async (req,res) => {
-    const {goods, quantity} = req.body;
-    const users = req.users;
+    const {productId, quantity} = req.body;
+    const users = req.user;
     
     try{
-        await cartService.patchProductsInCart(users,goods, quantity);
+        await cartService.patchProductsInCart(users,productId, quantity);
         res.status(200).json({message : "Success Patch Product"});
     }catch(error){
         res.status(400).json({message:"INVALID_INPUT"});
     }
 }
 const deleteProductsInCart = async(req,res) => {
-    const users = req.users;
-    const {goods} = req.body;
+    const users = req.user;
+    const {productId} = req.body;
   
   try{
-    await cartService.deleteProductsInCart(users,goods);
+    await cartService.deleteProductsInCart(users,productId);
     res.status(200).json({message : "Success Delete Product"})
   }catch(error){
     res.status(400).json({message:"INVALID_INPUT"});
   }
 }
 module.exports = {
-    createCart, postProductsInCart, patchProductsInCart, deleteProductsInCart,getCartItems
+    createCart, patchProductsInCart, deleteProductsInCart,getCartItems
 };
 
