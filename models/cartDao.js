@@ -40,7 +40,6 @@ const queryCartItems = async (userId) => {
         `,
       [userId]
     );
-
     return data;
   } catch (err) {
     const error = new Error('DATABASE_QUERY_ERROR');
@@ -48,7 +47,6 @@ const queryCartItems = async (userId) => {
     throw error;
   }
 };
-
 const createCart = async (userId, productId, quantity) => {
   try {
     const carts = await dataSource.query(
@@ -79,9 +77,8 @@ const getProductById = async (productId) => {
 };
 
 const getCarts = async (userId) => {
-  const [cartItems] = await Promise.all([
-    dataSource.query(
-      `SELECT 
+  const cartItems = await dataSource.query(
+    `SELECT 
         carts.product_id,
         products.id,
         products.price,
@@ -95,12 +92,11 @@ const getCarts = async (userId) => {
         carts.product_id = products.id
       WHERE 
         user_id = ?`,
-      [userId]
-    ),
-  ]);
+    [userId]
+  );
 
   return {
-    carts: cartItems,
+    cartItems,
   };
 };
 

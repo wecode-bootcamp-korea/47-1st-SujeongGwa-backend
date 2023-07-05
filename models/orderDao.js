@@ -37,17 +37,20 @@ const createOrder = async (
 
     const orderId = order.insertId;
 
-    for (const cart of carts) {
-      await queryRunner.query(
-        `INSERT INTO order_detail(
-          order_id,
-          product_id,
-          quantity
-        ) VALUES (?, ?, ?)`,
-        [orderId, cart.product_id, cart.quantity]
-      );
-    }
+    const queryValues = carts.map((cart) => [
+      orderId,
+      cart.product_id,
+      cart.quantity,
+    ]);
 
+    await queryRunner.query(
+      `INSERT INTO order_detail(
+        order_id,
+        product_id,
+        quantity
+      ) VALUES ?`,
+      [queryValues]
+    );
     const updatePoints = await queryRunner.query(
       `UPDATE 
         users 
