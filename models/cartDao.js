@@ -1,4 +1,4 @@
-const dataSource = require('./dataSource');
+const dataSource = require("./dataSource");
 
 const queryCartItems = async (userId) => {
   try {
@@ -77,9 +77,74 @@ const getProductById = async (productId) => {
   return product;
 };
 
+const postProductsInCart = async (userId, productId, quantity) => {
+    try {
+        const carts = await dataSource.query(
+          `INSERT INTO 
+            carts (
+            user_id, 
+            product_id, 
+            quantity
+            ) VALUES (?,?,?)`,
+          [userId, productId, quantity]
+        );
+    
+        return carts;
+      } catch (error) {
+        const err = new Error("INVALID_INPUT_DATA");
+        err.statusCode = 400;
+        throw err;
+      }
+    };
+const patchProductsInCart = async(user_id,product_name, quantity)=>{
+    try{
+        if(quantity == 0){
+            const err = new Error("0개 미만으로는 숫자를 변경할 수 없습니다.",error)
+            err.statusCode = 400;
+            throw err;
+        }
+      const cartPatch = await dataSource.query(
+          `
+          UPDATE 
+          carts 
+          SET quantity = ?
+          WHERE carts.user_id = ? 
+          AND carts.product_id = ?;
+          `,[quantity, user_id, product_name]
+      )
+      return cartPatch;
+          
+    }catch (error) {
+        const err = new Error("INVALID_INPUT_DATA");
+        err.statusCode = 400;
+        throw err;
+        }
+}
+const deleteProductsInCart = async(users,goods)=>{
+    try{
+    await dataSource.query(
+        `
+        DELETE FROM carts
+        WHERE carts.user_id = ?
+        AND carts.product_id = ?
+        `,[users,goods]
+    )
+    const message = 'SUCCESS DELETE';
+    return message;
+    }catch(error) {
+    console.error("INVALID_INPUT_DATA", error);
+    error.statusCode = 400;
+    throw error;
+    }
+
+}
 module.exports = {
+  postProductsInCart,
+  patchProductsInCart,
+  deleteProductsInCart,
   createCart,
   getProductById,
   queryCartItems,
   dataSource,
 };
+
