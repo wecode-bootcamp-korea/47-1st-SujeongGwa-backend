@@ -1,4 +1,3 @@
-const { query } = require('express');
 const dataSource = require('./dataSource');
 
 const createUser = async function (
@@ -16,8 +15,9 @@ const createUser = async function (
               name,
               email,
               password,
-              account
-              ) VALUES (?, ?, ?, ?, ?);
+              account,
+              point
+              ) VALUES (?, ?, ?, ?, ?,1000000);
           `,
       [typeId, name, email, hashedPassword, account]
     );
