@@ -10,8 +10,6 @@ const dataSource = new DataSource({
   database: process.env.DB_DATABASE,
 });
 
-const queryRunner = dataSource.createQueryRunner();
-
 const emailTransporter = createTransport({
   service: process.env.EMAIL_SERVICE,
   auth: {
@@ -20,4 +18,4 @@ const emailTransporter = createTransport({
   },
 });
 
-(module.exports = dataSource), queryRunner, emailTransporter;
+module.exports = { dataSource, emailTransporter };

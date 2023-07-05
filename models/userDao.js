@@ -1,5 +1,4 @@
 const dataSource = require('./dataSource');
-const queryRunner = require('./dataSource');
 
 const createUser = async function (
   typeId,
@@ -8,61 +7,39 @@ const createUser = async function (
   hashedPassword,
   account
 ) {
-  let result;
-
   try {
-    await queryRunner.startTransaction();
-
-    result = await queryRunner.query(
+    const result = await dataSource.query(
       `INSERT INTO 
-          users(
-          type_id,
-          name,
-          email,
-          password,
-          account,
-          point
-          ) VALUES (?, ?, ?, ?, ?, 1000000);
-      `,
+              users(
+              type_id,
+              name,
+              email,
+              password,
+              account,
+              point
+              ) VALUES (?, ?, ?, ?, ?,1000000);
+          `,
       [typeId, name, email, hashedPassword, account]
     );
-
-    await queryRunner.commitTransaction();
+    return result;
   } catch (err) {
-    await queryRunner.rollbackTransaction();
     const error = new Error('INVALID_DATA_INPUT');
     error.statusCode = 400;
     throw error;
   }
-
-  return result;
 };
 
-const createUserAndSendEmail = async (newUser) => {
-  let user;
-
+const getUserEmailById = async function (userId) {
   try {
-    await queryRunner.startTransaction();
-
-    user = await createUserE(newUser);
-    await sendEmail(user.email);
-
-    await queryRunner.commitTransaction();
-  } catch (error) {
-    await queryRunner.rollbackTransaction();
+    const query = 'SELECT email FROM users WHERE id = ?';
+    const result = await dataSource.query(query, [userId]);
+    const email = result[0]?.email || null;
+    return email;
+  } catch (err) {
+    const error = new Error('Failed to get user email');
+    error.statusCode = 500;
     throw error;
   }
-
-  return user;
-};
-
-const createUserE = async (newUser) => {
-  const { email } = newUser;
-  const result = await queryRunner.query(
-    `INSERT INTO users (email) VALUES (?)`,
-    [email]
-  );
-  return result;
 };
 const getUserByEmail = async (email) => {
   try {
@@ -122,5 +99,5 @@ module.exports = {
   createUser,
   getUserByEmail,
   getUserByAccount,
-  createUserAndSendEmail,
+  getUserEmailById,
 };
