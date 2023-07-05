@@ -9,7 +9,11 @@ const createOrder = async (req, res) => {
       AFTER_PURCHASE: 2,
     });
 
-    const orderInfo = await orderService.createOrder(userId, address, orderStatusEnum);
+    const orderInfo = await orderService.createOrder(
+      userId,
+      address,
+      orderStatusEnum
+    );
 
     res.status(200).json({ message: 'SUCCESS_CREATE_ORDER', data: orderInfo });
   } catch (error) {
