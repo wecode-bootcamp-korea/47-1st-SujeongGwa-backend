@@ -1,7 +1,7 @@
 const userDao = require('../models/userDao');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const emailTransporter = require('./dataSource');
+const nodemailer = require('nodemailer');
 
 const hashPassword = async (plaintextPassword) => {
   const saltRounds = 10;

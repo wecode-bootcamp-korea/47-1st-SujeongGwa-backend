@@ -19,7 +19,6 @@ const signUp = async (req, res) => {
     }
 
     await userService.signUp(typeId, name, email, password, account);
-    await createUserEmail({ email });
     return res.status(201).json({
       message: 'SIGNUP_SUCCESS',
     });
