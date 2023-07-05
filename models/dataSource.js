@@ -1,4 +1,5 @@
-const { DataSource } = require("typeorm");
+const { DataSource } = require('typeorm');
+const { createTransport } = require('nodemailer');
 
 const dataSource = new DataSource({
   type: process.env.DB_CONNECTION,
@@ -9,4 +10,14 @@ const dataSource = new DataSource({
   database: process.env.DB_DATABASE,
 });
 
-module.exports = dataSource;
+const queryRunner = dataSource.createQueryRunner();
+
+const emailTransporter = createTransport({
+  service: process.env.EMAIL_SERVICE,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
+(module.exports = dataSource), queryRunner, emailTransporter;

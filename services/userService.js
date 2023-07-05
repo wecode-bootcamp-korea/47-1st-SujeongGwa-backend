@@ -1,6 +1,7 @@
 const userDao = require('../models/userDao');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const emailTransporter = require('./dataSource');
 
 const hashPassword = async (plaintextPassword) => {
   const saltRounds = 10;
@@ -42,6 +43,23 @@ const signUp = async (typeId, name, email, password, account) => {
   );
 
   return createUser;
+};
+
+const sendEmail = async (userEmail) => {
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: userEmail,
+    subject: 'WELCOME TO SJG',
+    html: '<p><strong>WELCOME TO SJG TILE!</strong></p><p>ENJOY YOUR NEVER-EXPIRING WELCOME GIFT OF <u>10,000,000 WON</u></p><p>YOU CAN USE IT AT ANY TIME.</p><p>SJW타일에 가입하신 것을 환영합니다!!.</p><p>유효기간이 없는 <u>10,000,000포인트</u>를 지급했습니다.</p><p>언제든 사용하세요!</p>',
+  };
+
+  try {
+    await emailTransporter.sendMail(mailOptions);
+    console.log('Email sent successfully.');
+  } catch (error) {
+    console.log('Failed to send email:', error);
+    throw new Error('EMAIL_SEND_ERROR');
+  }
 };
 
 const signInWithEmail = async (email, password) => {
@@ -102,4 +120,5 @@ module.exports = {
   signUp,
   signInWithEmail,
   signInWithAccount,
+  sendEmail,
 };
