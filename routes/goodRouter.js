@@ -1,5 +1,3 @@
-//routes/goodRouter.js
-
 const express = require('express');
 const { goodController } = require('../controllers');
 
