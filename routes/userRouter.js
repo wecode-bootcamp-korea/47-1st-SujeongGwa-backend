@@ -4,6 +4,8 @@ const { loginRequired } = require('../utils/auth');
 const router = express.Router();
 
 router.post('/signup', userController.signUp);
+router.get('/orders', loginRequired, userController.orderDetail);
+
 router.post('/signin', userController.signIn);
 router.get('/information', loginRequired, userController.getUserInfomation);
 
