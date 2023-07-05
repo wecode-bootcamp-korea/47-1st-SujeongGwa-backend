@@ -1,4 +1,3 @@
-const { query } = require('express');
 const dataSource = require('./dataSource');
 
 const createUser = async function (
@@ -16,8 +15,9 @@ const createUser = async function (
               name,
               email,
               password,
-              account
-              ) VALUES (?, ?, ?, ?, ?);
+              account,
+              point
+              ) VALUES (?, ?, ?, ?, ?,1000000);
           `,
       [typeId, name, email, hashedPassword, account]
     );
@@ -119,7 +119,7 @@ const orderlist = async function (userId) {
   }
 };
 
-const myaccount = async (userId) => {
+const myAccount = async (userId) => {
   try {
     const data = await dataSource.query(
       `
@@ -130,7 +130,6 @@ const myaccount = async (userId) => {
    
     FROM
       users
-      INNER JOIN orders ON users.id = orders.user_id
     WHERE
       users.id = ?
       `,
@@ -150,5 +149,5 @@ module.exports = {
   getUserByEmail,
   getUserByAccount,
   orderlist,
-  myaccount,
+  myAccount,
 };

@@ -103,8 +103,8 @@ const getOrderList = async function (userId) {
   return myOrderDetail;
 };
 
-const getmyaccount = async (userId) => {
-  const myAccont = await userDao.myaccount(userId);
+const getMyAccount = async (userId) => {
+  const myAccont = await userDao.myAccount(userId);
   return myAccont;
 };
 
@@ -113,5 +113,5 @@ module.exports = {
   signInWithEmail,
   signInWithAccount,
   getOrderList,
-  getmyaccount,
+  getMyAccount,
 };
