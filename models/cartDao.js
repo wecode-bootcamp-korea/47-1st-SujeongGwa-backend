@@ -70,7 +70,7 @@ const getProductById = async (productId) => {
   return product;
 };
 
-const postProductsInCart = async (user_id, product_id, quantity) => {
+const postProductsInCart = async (userId, productId, quantity) => {
     try {
         const carts = await dataSource.query(
           `INSERT INTO 
@@ -79,14 +79,14 @@ const postProductsInCart = async (user_id, product_id, quantity) => {
             product_id, 
             quantity
             ) VALUES (?,?,?)`,
-          [user_id, product_id, quantity]
+          [userId, productId, quantity]
         );
     
         return carts;
       } catch (error) {
-        console.error("INVALID_INPUT_DATA", error);
-        error.statusCode = 400;
-        throw error;
+        const err = new Error("INVALID_INPUT_DATA");
+        err.statusCode = 400;
+        throw err;
       }
     };
 const patchProductsInCart = async(user_id,product_name, quantity)=>{
@@ -96,7 +96,7 @@ const patchProductsInCart = async(user_id,product_name, quantity)=>{
             error.statusCode = 400;
             throw error;
         }
-      let cart_patch = await dataSource.query(
+      const cartPatch = await dataSource.query(
           `
           UPDATE 
           carts 
@@ -105,7 +105,7 @@ const patchProductsInCart = async(user_id,product_name, quantity)=>{
           AND carts.product_id = ?;
           `,[quantity, user_id, product_name]
       )
-      return cart_patch;
+      return cartPatch;
           
     }catch (error) {
         const err = new Error("INVALID_INPUT_DATA");

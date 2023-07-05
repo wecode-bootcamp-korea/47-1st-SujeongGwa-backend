@@ -31,10 +31,10 @@ const createCart = async (req, res) => {
 };
 
 const postProductsInCart = async (req, res) => {
-  const { user_id, product_id, quantity } = req.body;
+  const { userId, productId, quantity } = req.body;
 
   try {
-    await cartService.postProductsInCart(user_id, product_id, quantity);
+    await cartService.postProductsInCart(userId, productId, quantity);
     res.status(200).json({ message: "Success Post Products" });
   } catch (error) {
     res.status(400).json({ message: "IVALID_INPUT" });
