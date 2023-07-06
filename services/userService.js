@@ -104,8 +104,8 @@ const getOrderList = async function (userId) {
 };
 
 const getMyAccount = async (userId) => {
-  const myAccont = await userDao.myAccount(userId);
-  return myAccont;
+  const myAccount = await userDao.myAccount(userId);
+  return myAccount;
 };
 
 module.exports = {

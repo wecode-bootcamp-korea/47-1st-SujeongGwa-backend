@@ -126,8 +126,8 @@ const myAccount = async (userId) => {
       SELECT
       users.id AS myId,
       users.name AS myName,
-      users.email AS myEmail
-   
+      users.email AS myEmail,
+      point
     FROM
       users
     WHERE
