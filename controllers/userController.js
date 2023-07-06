@@ -1,6 +1,6 @@
 const { userService } = require('../services');
 
-const signUp = async (req, res, next) => {
+const signUp = async (req, res) => {
   try {
     const { typeId, name, email, password, account } = req.body;
 
@@ -19,22 +19,14 @@ const signUp = async (req, res, next) => {
     }
 
     await userService.signUp(typeId, name, email, password, account);
-    req.userEmail = email;
-    next();
+
+    return res.status(201).json({
+      message: 'SIGNUP_SUCCESS',
+    });
   } catch (error) {
     return res
       .status(error.statusCode || 500)
       .json({ message: 'INVALID_USER_REQUEST' });
-  }
-};
-
-const sendEmail = async (req, res) => {
-  try {
-    const userEmail = req.userEmail;
-    await emailService.sendEmail(userEmail);
-    return res.status(200).json({ message: 'SIGNUP_SUCCESS' });
-  } catch (error) {
-    return res.status(500).json({ message: 'Failed to send email' });
   }
 };
 
@@ -64,5 +56,4 @@ const signIn = async (req, res) => {
 module.exports = {
   signUp,
   signIn,
-  sendEmail,
 };

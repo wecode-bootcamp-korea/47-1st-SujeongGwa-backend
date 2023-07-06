@@ -29,7 +29,7 @@ const createUser = async function (
   }
 };
 
-const getUserEmailById = async function (userId) {
+const usersEmail = async function (userId) {
   try {
     const query = 'SELECT email FROM users WHERE id = ?';
     const result = await dataSource.query(query, [userId]);
@@ -99,5 +99,5 @@ module.exports = {
   createUser,
   getUserByEmail,
   getUserByAccount,
-  getUserEmailById,
+  usersEmail,
 };
