@@ -47,9 +47,23 @@ const signIn = async (req, res) => {
       accessToken = await userService.signInWithAccount(account, password);
     }
 
-    res.status(200).json({ message: 'Login Success', accessToken });
+    res.status(200).json({ message: 'SIGNIN_SUCCESS', accessToken });
   } catch (error) {
     res.status(error.statusCode || 401).json({ message: error.message });
+  }
+};
+
+const orderDetail = async function (req, res) {
+  try {
+    const userId = req.user;
+    const result = await userService.getOrderList(userId);
+
+    return res.status(200).json({ data: result });
+  } catch (err) {
+    console.error(err);
+    return await res
+      .status(err.statusCode || 400)
+      .json({ message: err.message });
   }
 };
 
@@ -65,8 +79,11 @@ const getUserInfomation = async function (req, res) {
       .json({ message: err.message });
   }
 };
+
 module.exports = {
   signUp,
   signIn,
+  orderDetail,
+  orderDetail,
   getUserInfomation,
 };
