@@ -1,6 +1,7 @@
 const userDao = require('../models/userDao');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('../node_modules/nodemailer');
 
 const hashPassword = async (plaintextPassword) => {
   const saltRounds = 10;
@@ -32,6 +33,7 @@ const signUp = async (typeId, name, email, password, account) => {
       throw error;
     }
   }
+
   const hashedPassword = await hashPassword(password);
   const createUser = await userDao.createUser(
     typeId,
@@ -40,8 +42,44 @@ const signUp = async (typeId, name, email, password, account) => {
     hashedPassword,
     account
   );
-
+  await sendEmail(email);
   return createUser;
+};
+
+const transporter = nodemailer.createTransport({
+  service: process.env.EMAIL_SERVICE,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
+
+const sendEmail = async function (userEmail) {
+  console.log(userEmail);
+  const mailOptions = {
+    from: 'Sujeongwa6@gmail.com',
+    to: userEmail,
+    subject: 'WELCOME TO SJG',
+    html: '<p><strong>WELCOME TO SJG TILE!</strong></p><p>ENJOY YOUR NEVER-EXPIRING WELCOME GIFT OF <u>10,000,000 WON</u></p><p>YOU CAN USE IT AT ANY TIME.</p><p>SJG타일에 가입하신 것을 환영합니다!!.</p><p>유효기간이 없는 <u>10,000,000포인트</u>를 지급했습니다.</p><p>언제든 사용하세요!</p>',
+  };
+
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log('EMAIL_SENT ' + info.response);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+const signUpMail = async (newUser) => {
+  try {
+    const user = await userDao.createUserEmail(newUser);
+    await sendEmail(user.email);
+    return user;
+  } catch (error) {
+    throw error;
+  }
 };
 
 const signInWithEmail = async (email, password) => {
@@ -112,6 +150,8 @@ module.exports = {
   signUp,
   signInWithEmail,
   signInWithAccount,
+  signUpMail,
+  sendEmail,
   getOrderList,
   getMyAccount,
 };

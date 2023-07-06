@@ -22,8 +22,25 @@ const createUser = async function (
       [typeId, name, email, hashedPassword, account]
     );
     return result;
+  } catch (error) {
+    const err = new Error('INVALID_DATA_INPUT');
+    error.statusCode = 400;
+    throw err;
+  }
+};
+const sendEmail = async function (userId) {
+  try {
+    const [result] = await dataSource.query(
+      `SELECT 
+ email 
+ FROM 
+ users.id=?:
+`,
+      [userId]
+    );
+    return result;
   } catch (err) {
-    const error = new Error('INVALID_DATA_INPUT');
+    const error = new Error('EMAIL SEND ERROR');
     error.statusCode = 400;
     throw error;
   }
@@ -143,11 +160,11 @@ const myAccount = async (userId) => {
     throw error;
   }
 };
-
 module.exports = {
   createUser,
   getUserByEmail,
   getUserByAccount,
+  sendEmail,
   orderlist,
   myAccount,
 };
