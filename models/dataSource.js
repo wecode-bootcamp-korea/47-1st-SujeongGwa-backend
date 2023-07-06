@@ -11,10 +11,10 @@ const dataSource = new DataSource({
 });
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: process.env.EMAIL_SERVICE,
   auth: {
-    user: 'Sujeongwa6@gmail.com',
-    pass: 'vjnltmhxziuavjui',
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASSWORD,
   },
 });
 

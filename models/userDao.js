@@ -28,19 +28,30 @@ const createUser = async function (
     throw error;
   }
 };
+const userEmailDate =async function(userId){
+  try{const result =await dataSource.query(
+`SELECT 
+ email 
+ FROM 
+ users.id=?:
+`,[userId]
+  );
+  return result;
+} catch (err) {
+  const error = new Error('EMAIL SEND ERROR');
+  error.statusCode = 400;
+  throw error;
+}
 
-const usersEmail = async function (userId) {
-  try {
-    const query = 'SELECT email FROM users WHERE id = ?';
-    const result = await dataSource.query(query, [userId]);
-    const email = result[0]?.email || null;
-    return email;
-  } catch (err) {
-    const error = new Error('Failed to get user email');
-    error.statusCode = 500;
-    throw error;
-  }
-};
+
+
+
+
+
+  )
+
+
+}
 const getUserByEmail = async (email) => {
   try {
     const [result] = await dataSource.query(
@@ -99,5 +110,4 @@ module.exports = {
   createUser,
   getUserByEmail,
   getUserByAccount,
-  usersEmail,
 };
