@@ -23,19 +23,30 @@ const createCart = async (userId, productId, quantity) => {
   const postProducts = await cartDao.createCart(userId, productId, quantity);
   return postProducts;
 };
-const patchProductsInCart = async(user_id, product_name, product_quantity) => {
-    const patchProducts = await cartDao.patchProductsInCart(user_id, product_name, product_quantity);
-    return patchProducts;
-}
-const deleteProductsInCart = async(users,goods)=>{
+const patchProductsInCart = async (user_id, product_name, product_quantity) => {
+  const patchProducts = await cartDao.patchProductsInCart(
+    user_id,
+    product_name,
+    product_quantity
+  );
+  return patchProducts;
+};
+const deleteProductsInCart = async (users, goods) => {
   const deleteProducts = await cartDao.deleteProductsInCart(users, goods);
 
   return deleteProducts;
 };
+
+const modifyCarts = async (userId, products) => {
+  const modify = await cartDao.modifyCarts(userId, products);
+  return modify;
+};
+
 
 module.exports = {
   createCart,
   getCarts,
   patchProductsInCart,
   deleteProductsInCart,
+  modifyCarts,
 };
