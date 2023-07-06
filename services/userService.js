@@ -72,6 +72,16 @@ const sendEmail = async function (userEmail) {
   }
 };
 
+const signUpMail = async (newUser) => {
+  try {
+    const user = await userDao.createUserEmail(newUser);
+    await sendEmail(user.email);
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
+
 const signInWithEmail = async (email, password) => {
   const user = await userDao.getUserByEmail(email);
 
@@ -95,16 +105,6 @@ const signInWithEmail = async (email, password) => {
   });
 
   return accessToken;
-};
-
-const signUpMail = async (newUser) => {
-  try {
-    const user = await userDao.createUserEmail(newUser);
-    await sendEmail(user.email);
-    return user;
-  } catch (error) {
-    throw error;
-  }
 };
 
 const signInWithAccount = async (account, password) => {

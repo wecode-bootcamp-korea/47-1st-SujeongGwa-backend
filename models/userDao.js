@@ -45,6 +45,7 @@ const sendEmail = async function (userId) {
     throw error;
   }
 };
+
 const getUserByEmail = async (email) => {
   try {
     const [result] = await dataSource.query(
@@ -159,7 +160,6 @@ const myAccount = async (userId) => {
     throw error;
   }
 };
-
 module.exports = {
   createUser,
   getUserByEmail,
