@@ -47,7 +47,7 @@ const signIn = async (req, res) => {
       accessToken = await userService.signInWithAccount(account, password);
     }
 
-    res.status(200).json({ message: 'Login Success', accessToken });
+    res.status(200).json({ message: 'SIGNIN_SUCCESS', accessToken });
   } catch (error) {
     res.status(error.statusCode || 401).json({ message: error.message });
   }

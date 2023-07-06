@@ -4,21 +4,12 @@ const goodsDao = async (goodsDaoByCategoryId) => {
   try {
     const result = await appDataSource.query(
       `
-      SELECT p.id, 
-      p.sub_category_id, 
-      p.name, 
-      p.surface_type_id, 
-      p.sell_counts, 
-      p.price, 
-      p.weight, 
-      p.description, 
-      p.image_url, 
-      c.id AS category_id, 
-      c.title AS category_title
-      FROM products p
-      JOIN sub_categories s ON p.sub_category_id = s.id
-      JOIN categories c ON s.category_id = c.id;
-
+            SELECT products.id, products.sub_category_id, products.name, products.surface_type_id, products.sell_counts, products.price, products.weight, products.description, products.image_url
+            FROM products
+            JOIN sub_categories ON products.sub_category_id = sub_categories.id
+            JOIN categories ON sub_categories.category_id = categories.id
+            WHERE products.sub_category_id = ?
+            LIMIT 8;
             `,
       [goodsDaoByCategoryId]
     );
