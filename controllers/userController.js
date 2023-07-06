@@ -19,14 +19,12 @@ const signUp = async (req, res) => {
     }
 
     await userService.signUp(typeId, name, email, password, account);
-    await userService.sendEmail(email);
+
     return res.status(201).json({
       message: 'SIGNUP_SUCCESS',
     });
   } catch (error) {
-    return res
-      .status(error.statusCode || 500)
-      .json({ message: 'INVALID_USER_REQUEST' });
+    return res.status(error.statusCode || 500).json({ message: error.message });
   }
 };
 
