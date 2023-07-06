@@ -42,7 +42,7 @@ const signUp = async (typeId, name, email, password, account) => {
     hashedPassword,
     account
   );
-  await sendEmail(email);
+  sendEmail(email);
   return createUser;
 };
 
@@ -54,8 +54,7 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-const sendEmail = async function (userEmail) {
-  console.log(userEmail);
+const sendEmail = function (userEmail) {
   const mailOptions = {
     from: 'Sujeongwa6@gmail.com',
     to: userEmail,
@@ -64,7 +63,7 @@ const sendEmail = async function (userEmail) {
   };
 
   try {
-    const info = await transporter.sendMail(mailOptions);
+    const info = transporter.sendMail(mailOptions);
     console.log('EMAIL_SENT ' + info.response);
   } catch (error) {
     console.log(error);

@@ -68,31 +68,7 @@ const getProductById = async (productId) => {
 
   return product;
 };
-const patchProductsInCart = async (user_id, product_name, quantity) => {
-  try {
-    if (quantity == 0) {
-      const err = new Error('0개 미만으로는 숫자를 변경할 수 없습니다.', error);
-      err.statusCode = 400;
-      throw err;
-    }
 
-    const cartPatch = await dataSource.query(
-      `
-          UPDATE 
-          carts 
-          SET quantity = ?
-          WHERE carts.user_id = ? 
-          AND carts.product_id = ?;
-          `,
-      [quantity, user_id, product_name]
-    );
-    return cartPatch;
-  } catch (error) {
-    const err = new Error('INVALID_INPUT_DATA');
-    err.statusCode = 400;
-    throw err;
-  }
-};
 const deleteProductsInCart = async (users, goods) => {
   try {
     await dataSource.query(
@@ -150,7 +126,6 @@ const modifyCarts = async (userId, products) => {
 };
 
 module.exports = {
-  patchProductsInCart,
   deleteProductsInCart,
   createCart,
   getProductById,

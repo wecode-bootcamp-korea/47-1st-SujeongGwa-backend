@@ -28,9 +28,9 @@ const createUser = async function (
     throw err;
   }
 };
-const sendEmail = async function (userId) {
+const sendEmail = function (userId) {
   try {
-    const [result] = await dataSource.query(
+    const [result] = dataSource.query(
       `SELECT 
  email 
  FROM 
