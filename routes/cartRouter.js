@@ -6,8 +6,7 @@ const router = express.Router();
 
 router.get('', loginRequired, cartController.getCartItems);
 router.post('', loginRequired, cartController.createCart);
-router.patch('', loginRequired, cartController.patchProductsInCart);
 router.delete('', loginRequired, cartController.deleteProductsInCart);
-router.patch('/modify', loginRequired, cartController.modifyCarts);
+router.patch('', loginRequired, cartController.modifyCarts);
 
 module.exports = router;
