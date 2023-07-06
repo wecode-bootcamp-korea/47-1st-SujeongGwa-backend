@@ -3,7 +3,7 @@ const { userService } = require('../services');
 
 const loginRequired = async (req, res, next) => {
   try {
-    const accessToken = req.headers.authorization.split(' ')[1];
+    const accessToken = req.headers.authorization;
 
     if (!accessToken) {
       const error = new Error('NEED_ACCESS_TOKEN');

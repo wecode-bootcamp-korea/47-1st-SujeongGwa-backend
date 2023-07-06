@@ -9,6 +9,11 @@ const createOrder = async (req, res) => {
       AFTER_PURCHASE: 2,
     });
 
+    if (address.length === 0) {
+      const error = new Error('Please write down your address');
+      error.statusCode = 400;
+      throw error;
+    }
     const orderInfo = await orderService.createOrder(
       userId,
       address,
