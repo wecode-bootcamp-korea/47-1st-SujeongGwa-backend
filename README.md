@@ -1,4 +1,4 @@
-# Project SJM
+# Project SJG
 ![image](https://github.com/wecode-bootcamp-korea/47-1st-SujeongGwa-backend/assets/131442242/5566dafb-5223-4c4a-8d16-0d37cef2aab9)
 
 
