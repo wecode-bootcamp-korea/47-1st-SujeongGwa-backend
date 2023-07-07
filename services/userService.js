@@ -191,4 +191,4 @@ module.exports = {
   sendEmail,
   getOrderList,
   getMyAccount,
-};
+}
