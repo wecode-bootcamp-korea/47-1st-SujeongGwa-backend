@@ -40,19 +40,33 @@ const queryCartItems = async (userId) => {
     throw error;
   }
 };
+
 const createCart = async (userId, productId, quantity) => {
   try {
-    const carts = await dataSource.query(
-      `INSERT INTO 
-        carts (
-        user_id,
-        product_id, 
-        quantity
-        ) VALUES (?,?,?)`,
+    const existingCart = await dataSource.query(
+      `SELECT id, quantity FROM carts WHERE user_id = ? AND product_id = ?`,
+      [userId, productId]
+    );
+
+    if (existingCart.length > 0) {
+      const cartId = existingCart[0].id;
+      const existingQuantity = existingCart[0].quantity;
+      const updatedQuantity = existingQuantity + quantity;
+
+      await dataSource.query(`UPDATE carts SET quantity = ? WHERE id = ?`, [
+        updatedQuantity,
+        cartId,
+      ]);
+
+      return;
+    }
+
+    await dataSource.query(
+      `INSERT INTO carts (user_id, product_id, quantity) VALUES (?, ?, ?)`,
       [userId, productId, quantity]
     );
 
-    return carts;
+    return;
   } catch (error) {
     console.error('INVALID_INPUT_DATA', error);
     error.statusCode = 400;
@@ -68,7 +82,31 @@ const getProductById = async (productId) => {
 
   return product;
 };
+const patchProductsInCart = async (user_id, product_name, quantity) => {
+  try {
+    if (quantity == 0) {
+      const err = new Error('0개 미만으로는 숫자를 변경할 수 없습니다.', error);
+      err.statusCode = 400;
+      throw err;
+    }
 
+    const cartPatch = await dataSource.query(
+      `
+          UPDATE 
+          carts 
+          SET quantity = ?
+          WHERE carts.user_id = ? 
+          AND carts.product_id = ?;
+          `,
+      [quantity, user_id, product_name]
+    );
+    return cartPatch;
+  } catch (error) {
+    const err = new Error('INVALID_INPUT_DATA');
+    err.statusCode = 400;
+    throw err;
+  }
+};
 const deleteProductsInCart = async (users, goods) => {
   try {
     await dataSource.query(
@@ -125,11 +163,25 @@ const modifyCarts = async (userId, products) => {
   }
 };
 
+const updateCartQuantity = async (cartId, quantity) => {
+  try {
+    await dataSource.query('UPDATE carts SET quantity = ? WHERE id = ?', [
+      quantity,
+      cartId,
+    ]);
+  } catch (error) {
+    console.error('DATABASE_UPDATE_ERROR', error);
+    throw error;
+  }
+};
+
 module.exports = {
+  patchProductsInCart,
   deleteProductsInCart,
   createCart,
   getProductById,
   queryCartItems,
   getCarts,
   modifyCarts,
+  updateCartQuantity,
 };
