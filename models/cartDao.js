@@ -40,19 +40,33 @@ const queryCartItems = async (userId) => {
     throw error;
   }
 };
+
 const createCart = async (userId, productId, quantity) => {
   try {
-    const carts = await dataSource.query(
-      `INSERT INTO 
-        carts (
-        user_id,
-        product_id, 
-        quantity
-        ) VALUES (?,?,?)`,
+    const existingCart = await dataSource.query(
+      `SELECT id, quantity FROM carts WHERE user_id = ? AND product_id = ?`,
+      [userId, productId]
+    );
+
+    if (existingCart.length > 0) {
+      const cartId = existingCart[0].id;
+      const existingQuantity = existingCart[0].quantity;
+      const updatedQuantity = existingQuantity + quantity;
+
+      await dataSource.query(`UPDATE carts SET quantity = ? WHERE id = ?`, [
+        updatedQuantity,
+        cartId,
+      ]);
+
+      return;
+    }
+
+    await dataSource.query(
+      `INSERT INTO carts (user_id, product_id, quantity) VALUES (?, ?, ?)`,
       [userId, productId, quantity]
     );
 
-    return carts;
+    return;
   } catch (error) {
     console.error('INVALID_INPUT_DATA', error);
     error.statusCode = 400;
@@ -149,6 +163,17 @@ const modifyCarts = async (userId, products) => {
   }
 };
 
+const updateCartQuantity = async (cartId, quantity) => {
+  try {
+    await dataSource.query('UPDATE carts SET quantity = ? WHERE id = ?', [
+      quantity,
+      cartId,
+    ]);
+  } catch (error) {
+    console.error('DATABASE_UPDATE_ERROR', error);
+    throw error;
+  }
+};
 
 module.exports = {
   patchProductsInCart,
@@ -158,4 +183,5 @@ module.exports = {
   queryCartItems,
   getCarts,
   modifyCarts,
+  updateCartQuantity,
 };

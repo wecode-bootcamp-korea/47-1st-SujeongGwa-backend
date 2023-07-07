@@ -7,21 +7,39 @@ const getCarts = async (userId) => {
 };
 
 const createCart = async (userId, productId, quantity) => {
-  const product = await cartDao.getProductById(productId);
-  if (product.length === 0) {
-    const error = new Error('Product does not exist');
-    error.statusCode = 404;
+  try {
+    const product = await cartDao.getProductById(productId);
+    if (product.length === 0) {
+      const error = new Error('Product does not exist');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    if (quantity <= 0) {
+      const error = new Error('Quantity must be greater than 0');
+      error.statusCode = 400;
+      throw error;
+    }
+
+    const existingCart = await cartDao.queryCartItems(userId);
+    const existingCartItem = existingCart.find(
+      (item) => item.productId === productId
+    );
+
+    if (existingCartItem) {
+      const cartId = existingCartItem.cartId;
+      const existingQuantity = existingCartItem.quantity;
+      const updatedQuantity = existingQuantity + quantity;
+
+      await cartDao.updateCartQuantity(cartId, updatedQuantity);
+      return;
+    }
+
+    await cartDao.createCart(userId, productId, quantity);
+  } catch (error) {
+    console.error('INVALID_INPUT_DATA', error);
     throw error;
   }
-
-  if (quantity <= 0) {
-    const error = new Error('Quantity must be greater than 0');
-    error.statusCode = 400;
-    throw error;
-  }
-
-  const postProducts = await cartDao.createCart(userId, productId, quantity);
-  return postProducts;
 };
 
 const deleteProductsInCart = async (users, goods) => {
