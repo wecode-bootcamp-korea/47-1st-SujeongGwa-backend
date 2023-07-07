@@ -13,8 +13,8 @@
   - Project Manager: 김상원(B)
   - Teammates: 서동희(B), 이주현(B), 정성남(B), 최진이(F)  
 - 깃헙 레포지토리
-  - [Frontend](https://github.com/wecode-bootcamp-kore47-1st-SujeongGwa-backend)
-  - [Backend](https://github.com/wecode-bootcamp-korea/47-1st-SujeongGwa-frontend)
+  - [Frontend](https://github.com/wecode-bootcamp-korea/47-1st-SujeongGwa-frontend)
+  - [Backend](https://github.com/wecode-bootcamp-korea/47-1st-SujeongGwa-backend)
 
 
 ## ✨ 서비스 소개
