@@ -5,30 +5,35 @@
 
 #### \*[aesop](https://www.aesop.com/kr/) 웹사이트를 모델링한 프로젝트입니다.
 
-## 🧚‍♂️ 개발 기간 및 인원
+## 🐱 개발 기간 및 인원
 
 - 개발 기간 : 2023/06/26 ~ 2023/07/07
+  
 - 개발 인원 : 프론트엔드 2명 , 백엔드 4명
-  - Product Manager: 김수정(F)
-  - Project Manager: 김상원(B)
-  - Teammates: 서동희(B), 이주현(B), 정성남(B), 최진이(F)  
+  - Product Manager: 김수정(F)<a href="https://github.com/Kimsu10"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white&link=https://github.com/Kimsu10"/></a>
+  - Project Manager: 김상원(B)<a href="https://github.com/Teachsue"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white&link=https://github.com/Teachsue"/></a>
+  - Teammates: </br>
+서동희(B)<a href="https://github.com/donghee9"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white&link=https://github.com/donghee9"/></a></br>
+이주현(B)<a href="https://github.com/sioscorial"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white&link=https://github.com/sioscorial"/></a></br>
+정성남(B)<a href="https://github.com/jseongnam"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white&link=https://github.com/jseongnam"/></a></br>
+최진이(F)<a href="https://github.com/jjinichoi"><img src="https://img.shields.io/badge/GitHub-181717?style=flat-square&logo=GitHub&logoColor=white&link=https://github.com/jjinichoi"/></a></br>
+
 - 깃헙 레포지토리
   - [Frontend](https://github.com/wecode-bootcamp-korea/47-1st-SujeongGwa-frontend)
   - [Backend](https://github.com/wecode-bootcamp-korea/47-1st-SujeongGwa-backend)
 
 
-## ✨ 서비스 소개
+## 💡 서비스 소개
 - 서비스명 : SJG
 - 판매상품 : 타일(Porcelain, Walltile, Floortile)
-- 고객 : 사업자(BTOB)들과 일반 소비자들(BTOC)
+- 고객 : 인테리어에 관심이 많은 개인 구매자, 대리구매를 하는 타일 사업자
 - 컨셉
-	- 이솝 사이트를 기본 베이스를 하여 친환경에 초첨을 두며 만들었습니다.
-        - 이솝 사이트의 레이아웃을 토대로 최대한 비슷하게 만들었으며
-        - 실제 사이트를 사용했을때 불편한점을  저희가 기능을 추가하여 사용자의 편의성을 상승시켰습니다.
-           
+  - 이솝 사이트를 기본 베이스를 하여 친환경에 초첨을 두며 만들었습니다.
+  - 이솝 사이트의 레이아웃을 토대로 최대한 비슷하게 만들었으며
+실제 사이트를 사용했을때 불편한점을 저희가 기능을 추가하여 사용자의 편의성을 상승시켰습니다.
+    
 
-
-## ⚡️ 구현 기능
+## 💻 구현 기능
 |기능|FE|BE|
 |---|:---:|:---:|
 |회원가입|최진이|서동희| 
