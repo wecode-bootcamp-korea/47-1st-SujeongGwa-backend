@@ -16,19 +16,18 @@ const createOrder = async (userId, address, orderStatusEnum) => {
     let totalPrice = 0;
     let totalWeight = 0;
 
-    const carts = cartItems.map((cart) => {
+    let cartItem = cartItems.map((cart) => {
       const itemTotalPrice = cart.price * cart.quantity;
       const itemTotalWeight = cart.weight * cart.quantity;
 
       totalPrice += itemTotalPrice;
       totalWeight += itemTotalWeight;
-
       if (userPoint < totalPrice) {
+        console.log("수량이 너무 많습니다.");
         const error = new Error('Not enough points to complete this purchase');
         error.statusCode = 400;
         throw error;
       }
-
       return {
         price: cart.price,
         weight: cart.weight,
@@ -37,7 +36,7 @@ const createOrder = async (userId, address, orderStatusEnum) => {
         totalWeight: itemTotalWeight,
       };
     });
-
+    cartItem();
     const postInfo = await orderDao.createOrder(
       userId,
       address,
@@ -46,7 +45,6 @@ const createOrder = async (userId, address, orderStatusEnum) => {
       cartItems,
       orderStatusEnum
     );
-
     return postInfo;
   } catch (error) {
     console.error('INVALID_INPUT_DATA', error);
@@ -55,5 +53,5 @@ const createOrder = async (userId, address, orderStatusEnum) => {
 };
 
 module.exports = {
-  createOrder,
+  createOrder
 };

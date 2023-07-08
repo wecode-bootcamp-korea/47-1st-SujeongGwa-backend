@@ -11,7 +11,7 @@ const hashPassword = async (plaintextPassword) => {
 const signUp = async (typeId, name, email, password, account) => {
   const emailRegex =
     /^[0-9a-zA-Z]([-_\.]?[0-9a-zA-Z])*@[0-9a-zA-z]([-_\.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,15})/;
   const accountRegex = /^[0-9]{10}$/;
 
   if (typeId === 1) {
@@ -55,9 +55,8 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendEmail = function (userEmail) {
-  console.log(userEmail);
   const mailOptions = {
-    from: 'Sujeongwa6@gmail.com',
+    from: 'jseongnam1109@gmail.com',
     to: userEmail,
     subject: 'WELCOME TO SJG',
     html: `<div
@@ -101,10 +100,8 @@ const sendEmail = function (userEmail) {
   };
 
   try {
-    const info = transporter.sendMail(mailOptions);
-    console.log('EMAIL_SENT ' + info.response);
+    transporter.sendMail(mailOptions);
   } catch (error) {
-    console.log(error);
     throw error;
   }
 };
