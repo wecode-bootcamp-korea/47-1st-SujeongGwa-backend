@@ -14,11 +14,14 @@ const createOrder = async (req, res) => {
       error.statusCode = 400;
       throw error;
     }
+    console.log("orderController before");
     const orderInfo = await orderService.createOrder(
       userId,
       address,
       orderStatusEnum
     );
+    console.log("orderController after");
+
 
     res.status(200).json({ message: 'SUCCESS_CREATE_ORDER', data: orderInfo });
   } catch (error) {

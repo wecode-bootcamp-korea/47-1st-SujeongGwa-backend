@@ -4,9 +4,12 @@ const cartDao = require('../models/cartDao');
 
 const createOrder = async (userId, address, orderStatusEnum) => {
   try {
+    console.log("userID:",userId);
+    console.log("address:",address);
+    console.log("orderStatusEnum:",orderStatusEnum);
     const userPoint = await userDao.myAccount(userId);
     const { cartItems } = await cartDao.getCarts(userId);
-
+    const point = userPoint[0].point
     if (cartItems.length === 0) {
       const error = new Error('Cart is empty');
       error.statusCode = 400;
@@ -15,28 +18,31 @@ const createOrder = async (userId, address, orderStatusEnum) => {
 
     let totalPrice = 0;
     let totalWeight = 0;
-
-    let cartItem = cartItems.map((cart) => {
-      const itemTotalPrice = cart.price * cart.quantity;
-      const itemTotalWeight = cart.weight * cart.quantity;
+    console.log(cartItems);
+    let cartItem = cartItems.map((cart, index) => {
+      console.log('cart',cart);
+      let itemTotalPrice = Number(cart.price) * cart.quantity;
+      let itemTotalWeight = cart.weight * cart.quantity;
 
       totalPrice += itemTotalPrice;
       totalWeight += itemTotalWeight;
-      if (userPoint < totalPrice) {
+      if (point < totalPrice) {
         console.log("수량이 너무 많습니다.");
         const error = new Error('Not enough points to complete this purchase');
-        error.statusCode = 400;
+        error.statusCode = 402;
         throw error;
       }
-      return {
-        price: cart.price,
-        weight: cart.weight,
-        quantity: cart.quantity,
-        totalPrice: itemTotalPrice,
-        totalWeight: itemTotalWeight,
-      };
+      if(index === cartItems.length - 1 ){
+        return {
+          price: cart.price,
+          weight: cart.weight,
+          quantity: cart.quantity,
+          totalPrice: itemTotalPrice,
+          totalWeight: itemTotalWeight,
+        };
+      }
     });
-    cartItem();
+    console.log('cartItem:',cartItem);
     const postInfo = await orderDao.createOrder(
       userId,
       address,
@@ -45,6 +51,7 @@ const createOrder = async (userId, address, orderStatusEnum) => {
       cartItems,
       orderStatusEnum
     );
+    console.log('postInfo : ',postInfo);
     return postInfo;
   } catch (error) {
     console.error('INVALID_INPUT_DATA', error);
