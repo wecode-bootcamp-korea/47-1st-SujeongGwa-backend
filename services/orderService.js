@@ -4,9 +4,6 @@ const cartDao = require('../models/cartDao');
 
 const createOrder = async (userId, address, orderStatusEnum) => {
   try {
-    console.log("userID:",userId);
-    console.log("address:",address);
-    console.log("orderStatusEnum:",orderStatusEnum);
     const userPoint = await userDao.myAccount(userId);
     const { cartItems } = await cartDao.getCarts(userId);
     const point = userPoint[0].point
